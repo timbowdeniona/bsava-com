@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { loadEnvConfig } from '@next/env';
 import { algoliasearch } from 'algoliasearch';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
@@ -58,7 +59,7 @@ async function syncContentfulArticles() {
       const authorEntry = fields.author && 'fields' in fields.author
         ? fields.author
         : null;
-      const authorName = authorEntry ? (authorEntry.fields.name as string) : undefined;
+      const authorName = authorEntry && 'fields' in authorEntry ? (authorEntry.fields as any).name as string : undefined;
 
       // Resolve cover image URL
       const coverImageAsset = fields.coverImage && 'fields' in fields.coverImage
@@ -69,7 +70,7 @@ async function syncContentfulArticles() {
         : undefined;
 
       // Serialise Rich Text body to plain text for full-text search
-      const bodyText = fields.body ? documentToPlainTextString(fields.body) : '';
+      const bodyText = fields.body ? documentToPlainTextString(fields.body as any) : '';
 
       return {
         objectID: `contentful_article_${entry.sys.id}`,
@@ -112,7 +113,7 @@ async function syncContentfulAuthors() {
         : undefined;
 
       // Serialise Rich Text bio to plain text
-      const bioText = fields.bio ? documentToPlainTextString(fields.bio) : '';
+      const bioText = fields.bio ? documentToPlainTextString(fields.bio as any) : '';
 
       return {
         objectID: `contentful_author_${entry.sys.id}`,

@@ -13,8 +13,10 @@ const listCt = async (id: string) => {
   const environment = await space.getEnvironment('master');
   
   const ct = await environment.getContentType(id);
+  console.log(`Content Type: ${ct.name} (${ct.sys.id})`);
+  console.log(`Display Field: ${ct.displayField}`);
   console.dir(ct.fields, { depth: null });
 };
 
-listCt('article').catch(() => {});
-listCt('blogPost').catch(() => {});
+const typeId = process.argv[2] || 'article';
+listCt(typeId).catch(console.error);

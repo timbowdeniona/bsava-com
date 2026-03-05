@@ -1,0 +1,33 @@
+[dotenv@17.3.1] injecting env (29) from .env.local -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+Ensuring membership content type exists...
+  Creating membership content type...
+AccessDenied: {
+  "status": 403,
+  "statusText": "",
+  "message": "Forbidden",
+  "details": {
+    "reasons": [
+      "usageExceeded",
+      "You do not have permissions to create on ContentType, please contact your administrator for more information."
+    ]
+  },
+  "request": {
+    "url": "/spaces/chlw7ohttu2f/environments/master/content_types/membership",
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/vnd.contentful.management.v1+json",
+      "X-Contentful-User-Agent": "sdk contentful-management.js/0.0.0-determined-by-semantic-release; platform node.js/v22.18.0; os Linux/v22.18.0;",
+      "Authorization": "Bearer ...FKNn0",
+      "User-Agent": "axios/1.13.5",
+      "Content-Length": "821",
+      "Accept-Encoding": "gzip, compress, deflate, br"
+    },
+    "method": "put",
+    "payloadData": "{\"name\":\"Membership\",\"fields\":[{\"id\":\"title\",\"name\":\"Title\",\"type\":\"Symbol\",\"required\":true,\"localized\":false},{\"id\":\"type\",\"name\":\"Type\",\"type\":\"Symbol\",\"required\":true,\"localized\":false,\"validations\":[{\"in\":[\"vet\",\"nurse\",\"student\",\"other\"]}]},{\"id\":\"price\",\"name\":\"Price\",\"type\":\"Symbol\",\"required\":true,\"localized\":false},{\"id\":\"priceDescription\",\"name\":\"Price Description\",\"type\":\"Symbol\",\"required\":false,\"localized\":false},{\"id\":\"benefits\",\"name\":\"Benefits\",\"type\":\"Array\",\"required\":false,\"localized\":false,\"items\":{\"type\":\"Symbol\"}},{\"id\":\"detailedBenefits\",\"name\":\"Detailed Benefits\",\"type\":\"RichText\",\"required\":false,\"localized\":false},{\"id\":\"ctaLink\",\"name\":\"CTA Link\",\"type\":\"Symbol\",\"required\":false,\"localized\":false},{\"id\":\"ctaText\",\"name\":\"CTA Text\",\"type\":\"Symbol\",\"required\":false,\"localized\":false}]}"
+  },
+  "requestId": "25c2ebfe-0b11-4120-a42c-a6663b7ed239"
+}
+    at errorHandler (webpack:///node_modules/contentful-sdk-core/dist/error-handler.js:57:1)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async makeRequest (webpack:///adapters/REST/make-request.ts:36:10)
+    at async main (/home/timbowden/dev/bsava-com/scripts/populate-membership.ts:144:22)
