@@ -1,0 +1,18 @@
+
+.gcloudignore
+.git
+.gitignore
+node_modules
+vendor
+var/cache
+var/logs
+var/tmp
+public/var
+public/bundles
+tests
+phpunit.xml.dist
+.editorconfig
+.php-cs-fixer.dist.php
+composer.lock
+# Keep .docker directory as it contains nginx and supervisord configs
+# Keep Dockerfile.cloudrun and cloudbuild.yaml
