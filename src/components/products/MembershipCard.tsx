@@ -1,11 +1,15 @@
+"use client";
+
 import React from 'react';
 import { PimcoreProduct } from '@/types/pimcore';
+import { useCart } from '@/lib/store/useCart';
 
 interface MembershipCardProps {
   product: PimcoreProduct;
 }
 
 export function MembershipCard({ product }: MembershipCardProps) {
+  const addItem = useCart((state) => state.addItem);
   return (
     <div className="bg-bsava-navy text-white border-2 border-bsava-blue shadow-xl group flex flex-col h-full transform hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
       {/* Decorative background element */}
@@ -48,8 +52,11 @@ export function MembershipCard({ product }: MembershipCardProps) {
           </li>
         </ul>
 
-        <button className="w-full py-4 bg-white text-bsava-navy font-black uppercase text-xs tracking-[0.2em] shadow-lg hover:bg-bsava-blue hover:text-white transition-all mt-auto">
-          Join Today
+        <button 
+          onClick={() => addItem(product)}
+          className="w-full py-4 bg-white text-bsava-navy font-black uppercase text-xs tracking-[0.2em] shadow-lg hover:bg-bsava-blue hover:text-white transition-all mt-auto"
+        >
+          Add to Basket &rarr;
         </button>
       </div>
       

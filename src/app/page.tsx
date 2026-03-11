@@ -2,6 +2,7 @@ import { getProducts } from "@/lib/pimcore";
 import NewsSummary from "@/app/components/NewsSummary";
 import Link from "next/link";
 import Image from "next/image";
+import { getPimcoreImageUrl } from "@/lib/images";
 
 export default async function Home() {
   const products = await getProducts(3).catch(() => []);
@@ -48,7 +49,7 @@ export default async function Home() {
                   <div className="w-full bg-bsava-gray/10 aspect-video relative">
                     {product.mainImage?.fullpath ? (
                       <Image 
-                        src={`${process.env.NEXT_PUBLIC_PIMCORE_BASE_URL || 'http://35.246.89.127'}${product.mainImage.fullpath}`} 
+                        src={getPimcoreImageUrl(product.mainImage.fullpath)!} 
                         alt={product.title} 
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
