@@ -18,7 +18,7 @@ export const pimcoreFetch = async <T>(path: string, options: PimcoreRequestOptio
       ...options.headers,
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
-    next: { revalidate: 3600 } // Default cache 1 hour
+    next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 } // Default cache 1 hour, disable in dev
   });
 
   if (!response.ok) {
@@ -41,7 +41,7 @@ export const pimcoreGraphQL = async <T>(query: string, variables: Record<string,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ query, variables }),
-    next: { revalidate: 3600 } 
+    next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 } 
   });
 
   if (!response.ok) {
