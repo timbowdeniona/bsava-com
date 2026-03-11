@@ -1,1 +1,14 @@
-gcloud compute instances list
+[
+    {"name": "Vet Membership", "tierType": "vet", "annualFee": 299.00, "description": "Full membership for qualified veterinary surgeons", "benefits": ""},
+    {"name": "First Year Qualified Vet Membership", "tierType": "vet", "annualFee": 119.00, "description": "Discounted membership for vets in their first year of qualification", "benefits": ""},
+    {"name": "Second Year Qualified Vet Membership", "tierType": "vet", "annualFee": 169.00, "description": "Discounted membership for vets in their second year of qualification", "benefits": ""},
+    {"name": "Third Year Qualified Vet Membership", "tierType": "vet", "annualFee": 209.00, "description": "Discounted membership for vets in their third year of qualification", "benefits": ""},
+    {"name": "Postgraduate Membership", "tierType": "vet", "annualFee": 199.00, "description": "Membership for vets holding non-BSAVA postgraduate certificates", "benefits": ""},
+    {"name": "Veterinary Nurse Membership", "tierType": "nurse", "annualFee": 99.00, "description": "Full membership for qualified veterinary nurses", "benefits": ""},
+    {"name": "Overseas Vet Membership", "tierType": "vet", "annualFee": 149.00, "description": "Membership for veterinary surgeons based outside the UK", "benefits": ""},
+    {"name": "Vet Student Membership", "tierType": "student", "annualFee": 0.00, "description": "Free membership for veterinary students", "benefits": ""},
+    {"name": "Vet Student Plus Membership", "tierType": "student", "annualFee": 20.00, "description": "Enhanced membership for veterinary students with additional benefits", "benefits": ""},
+    {"name": "Veterinary Nurse Student Membership", "tierType": "student", "annualFee": 0.00, "description": "Free membership for veterinary nursing students", "benefits": ""},
+    {"name": "Concessionary Membership", "tierType": "vet", "annualFee": 0.00, "description": "33-50% discount membership. Criteria apply - application approval required by BSAVA Membership Services Team", "benefits": ""},
+    {"name": "Retired Member", "tierType": "vet", "annualFee": 0.00, "description": "Membership for retired veterinary professionals", "benefits": ""}
+]
