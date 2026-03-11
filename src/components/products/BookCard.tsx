@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { PimcoreProduct } from '@/types/pimcore';
 import { PriceBadge } from './PriceBadge';
 
@@ -19,10 +20,12 @@ export function BookCard({ product }: BookCardProps) {
         </div>
         
         {imageUrl ? (
-          <img 
+          <Image 
             src={imageUrl} 
             alt={product.title} 
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500" 
           />
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-bsava-navy/10 font-black p-8 text-center uppercase">

@@ -1,6 +1,7 @@
 import { getProducts } from "@/lib/pimcore";
 import NewsSummary from "@/app/components/NewsSummary";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function Home() {
   const products = await getProducts(3).catch(() => []);
@@ -46,10 +47,12 @@ export default async function Home() {
                 <div key={product.id} className="border border-bsava-gray flex flex-col items-start hover:border-bsava-blue transition-colors group">
                   <div className="w-full bg-bsava-gray/10 aspect-video relative">
                     {product.mainImage?.fullpath ? (
-                      <img 
+                      <Image 
                         src={`${process.env.NEXT_PUBLIC_PIMCORE_BASE_URL || 'http://35.246.89.127'}${product.mainImage.fullpath}`} 
                         alt={product.title} 
-                        className="absolute inset-0 w-full h-full object-contain p-4 bg-white" 
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-contain p-4 bg-white" 
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center text-bsava-navy/20 font-bold uppercase text-[10px]">
