@@ -1,0 +1,23 @@
+flysystem:
+    storages:
+        pimcore.asset.storage:
+            adapter: 'gcloud'
+            visibility: public
+            options:
+                client: 'google.storage.client'
+                bucket: '%env(GCS_BUCKET_NAME)%'
+                prefix: 'assets'
+        pimcore.thumbnail.storage:
+            adapter: 'gcloud'
+            visibility: public
+            options:
+                client: 'google.storage.client'
+                bucket: '%env(GCS_BUCKET_NAME)%'
+                prefix: 'thumbnails'
+        pimcore.version.storage:
+            adapter: 'gcloud'
+            visibility: private
+            options:
+                client: 'google.storage.client'
+                bucket: '%env(GCS_BUCKET_NAME)%'
+                prefix: 'versions'

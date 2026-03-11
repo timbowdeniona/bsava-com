@@ -1,0 +1,18 @@
+parameters:
+    secret: 'ThisTokenIsNotSoSecretChangeItImmediately'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\Controller\:
+        resource: '../src/Controller'
+        public: true
+        tags: [ 'controller.service_arguments' ]
+
+    google.storage.client:
+        class: Google\Cloud\Storage\StorageClient
+        arguments:
+            - projectId: '%env(GOOGLE_CLOUD_PROJECT)%'

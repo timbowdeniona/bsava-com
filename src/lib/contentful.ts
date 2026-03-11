@@ -1,6 +1,6 @@
 import { createClient, type Entry } from 'contentful';
 import { env } from './env';
-import type { ArticleSkeleton, AuthorSkeleton } from '@/types/contentful';
+import type { ArticleSkeleton, AuthorSkeleton, HeaderSkeleton, FooterSkeleton } from '@/types/contentful';
 
 export const contentfulClient = createClient({
   space: env.CONTENTFUL_SPACE_ID,
@@ -12,6 +12,23 @@ export const previewClient = createClient({
   accessToken: env.CONTENTFUL_PREVIEW_TOKEN || '',
   host: 'preview.contentful.com',
 });
+
+export const getHeader = async (): Promise<Entry<HeaderSkeleton> | null> => {
+  const response = await contentfulClient.getEntries<HeaderSkeleton>({
+    content_type: 'header',
+    include: 2,
+    limit: 1,
+  });
+  return response.items[0] || null;
+};
+
+export const getFooter = async (): Promise<Entry<FooterSkeleton> | null> => {
+  const response = await contentfulClient.getEntries<FooterSkeleton>({
+    content_type: 'footer',
+    limit: 1,
+  });
+  return response.items[0] || null;
+};
 
 export const getArticleBySlug = async (slug: string): Promise<Entry<ArticleSkeleton> | null> => {
   const response = await contentfulClient.getEntries<ArticleSkeleton>({
