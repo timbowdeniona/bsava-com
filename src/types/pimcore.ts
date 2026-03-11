@@ -7,7 +7,9 @@ export interface PimcoreProduct {
   mainImage?: {
     fullpath: string;
   };
-  basePrice?: number;
+  memberPrice?: number;
+  nonMemberPrice?: number;
+  basePrice?: number; // Legacy/Fallback
   // Publications
   author?: string;
   isbn?: string;

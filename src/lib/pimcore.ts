@@ -87,6 +87,8 @@ export const getProducts = async (limit: number = 20): Promise<PimcoreProduct[]>
           sku: edge.node.isbn,
           description: edge.node.description,
           mainImage: edge.node.coverImage,
+          memberPrice: edge.node.memberPrice,
+          nonMemberPrice: edge.node.nonMemberPrice,
           basePrice: edge.node.memberPrice
         });
       });
@@ -98,9 +100,11 @@ export const getProducts = async (limit: number = 20): Promise<PimcoreProduct[]>
           id: edge.node.id,
           productType: 'EBook',
           title: edge.node.title,
-          sku: edge.node.isbn, // Use ISBN for Ebooks
+          sku: edge.node.isbn,
           description: edge.node.description,
           mainImage: edge.node.coverImage,
+          memberPrice: edge.node.memberPrice,
+          nonMemberPrice: edge.node.nonMemberPrice,
           basePrice: edge.node.memberPrice
         });
       });
@@ -115,6 +119,11 @@ export const getProducts = async (limit: number = 20): Promise<PimcoreProduct[]>
           sku: edge.node.startDate ? `EVENT-${edge.node.startDate}` : undefined,
           description: edge.node.description,
           mainImage: undefined,
+          startDate: edge.node.startDate,
+          endDate: edge.node.endDate,
+          location: edge.node.location,
+          memberPrice: edge.node.memberPrice,
+          nonMemberPrice: edge.node.nonMemberPrice,
           basePrice: edge.node.memberPrice
         });
       });
@@ -129,6 +138,9 @@ export const getProducts = async (limit: number = 20): Promise<PimcoreProduct[]>
           sku: edge.node.startDate ? `COURSE-${edge.node.startDate}` : undefined,
           description: edge.node.description,
           mainImage: undefined,
+          startDate: edge.node.startDate,
+          memberPrice: edge.node.memberPrice,
+          nonMemberPrice: edge.node.nonMemberPrice,
           basePrice: edge.node.memberPrice
         });
       });
@@ -143,6 +155,8 @@ export const getProducts = async (limit: number = 20): Promise<PimcoreProduct[]>
           sku: edge.node.tierType ? `MEM-${edge.node.tierType}` : 'MEM-TIER',
           description: edge.node.description,
           mainImage: undefined,
+          memberPrice: edge.node.annualFee,
+          nonMemberPrice: edge.node.annualFee, // Membership is its own price
           basePrice: edge.node.annualFee
         });
       });
@@ -164,14 +178,18 @@ export const getProducts = async (limit: number = 20): Promise<PimcoreProduct[]>
               sku
               description
               mainImage { fullpath }
-              basePrice
+              memberPrice
+              nonMemberPrice
             }
           }
         }
       }
     `;
     const data = await pimcoreGraphQL<any>(legacyQuery, { first: limit });
-    return data.getProductListing?.edges.map((e: any) => e.node) || [];
+    return data.getProductListing?.edges.map((e: any) => ({
+      ...e.node,
+      basePrice: e.node.memberPrice
+    })) || [];
   }
 };
 
@@ -182,10 +200,10 @@ export const getPimcoreProduct = async (id: string | number): Promise<PimcorePro
     query getProduct($id: ID!) {
       getProduct(id: $id) {
         id
-        ... on Book { title sku description coverImage { fullpath } memberPrice }
-        ... on Ebook { title isbn description coverImage { fullpath } memberPrice }
-        ... on Event { title sku description eventImage { fullpath } memberPrice }
-        ... on Course { title sku description courseImage { fullpath } memberPrice }
+        ... on Book { title sku description coverImage { fullpath } memberPrice nonMemberPrice }
+        ... on Ebook { title isbn description coverImage { fullpath } memberPrice nonMemberPrice }
+        ... on Event { title sku description eventImage { fullpath } memberPrice nonMemberPrice }
+        ... on Course { title sku description courseImage { fullpath } memberPrice nonMemberPrice }
         ... on MembershipTier { name description membershipImage { fullpath } annualFee }
       }
     }
@@ -199,6 +217,8 @@ export const getPimcoreProduct = async (id: string | number): Promise<PimcorePro
     sku: p.sku || p.isbn,
     description: p.description,
     mainImage: p.coverImage || p.eventImage || p.courseImage || p.membershipImage,
+    memberPrice: p.memberPrice || p.annualFee,
+    nonMemberPrice: p.nonMemberPrice || p.annualFee,
     basePrice: p.memberPrice || p.annualFee
   };
 };
