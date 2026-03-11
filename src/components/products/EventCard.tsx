@@ -1,12 +1,16 @@
+"use client";
+
 import React from 'react';
 import { PimcoreProduct } from '@/types/pimcore';
 import { PriceBadge } from './PriceBadge';
+import { useCart } from '@/lib/store/useCart';
 
 interface EventCardProps {
   product: PimcoreProduct;
 }
 
 export function EventCard({ product }: EventCardProps) {
+  const addItem = useCart((state) => state.addItem);
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return null;
     try {
@@ -51,8 +55,11 @@ export function EventCard({ product }: EventCardProps) {
           {product.description || "Join BSAVA for this exclusive professional event."}
         </p>
 
-        <button className="w-full py-3 bg-bsava-blue text-white font-bold uppercase text-[10px] tracking-widest hover:bg-bsava-navy transition-colors mt-auto">
-          Register Now &rarr;
+        <button 
+          onClick={() => addItem(product)}
+          className="w-full py-3 bg-bsava-blue text-white font-bold uppercase text-[10px] tracking-widest hover:bg-bsava-navy transition-colors mt-auto"
+        >
+          Add to Basket &rarr;
         </button>
       </div>
     </div>

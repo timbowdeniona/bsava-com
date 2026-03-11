@@ -12,6 +12,7 @@ import {
   Highlight,
   useInstantSearch,
 } from 'react-instantsearch';
+import { getPimcoreImageUrl } from '@/lib/images';
 
 const searchClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -120,7 +121,7 @@ function AuthorCard({ hit }: { hit: AuthorHit }) {
 }
 
 function ProductCard({ hit }: { hit: ProductHit }) {
-  const imageUrl = hit.mainImage?.fullpath ? `http://localhost:8080${hit.mainImage.fullpath}` : null;
+  const imageUrl = getPimcoreImageUrl(hit.mainImage?.fullpath);
   return (
     <div className="group flex flex-col bg-white rounded-xl border border-gray-100 overflow-hidden hover:border-emerald-200 hover:shadow-md transition-all duration-200">
       <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center p-3">

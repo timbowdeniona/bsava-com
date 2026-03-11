@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getHeader } from '@/lib/contentful';
 import { Entry } from 'contentful';
 import { NavigationItemSkeleton } from '@/types/contentful';
+import CartIcon from './CartIcon';
 
 export default async function Header() {
   const header = await getHeader();
@@ -40,9 +41,13 @@ export default async function Header() {
                 );
               })}
             </div>
-            <button className="bg-bsava-blue text-white px-6 py-2 uppercase font-bold text-sm tracking-wide hover:bg-bsava-navy transition-colors">
-              MyBSAVA
-            </button>
+            
+            <div className="flex items-center gap-4">
+              <CartIcon />
+              <button className="bg-bsava-blue text-white px-6 py-2 uppercase font-bold text-sm tracking-wide hover:bg-bsava-navy transition-colors">
+                MyBSAVA
+              </button>
+            </div>
           </div>
           <button className="lg:hidden p-2 text-bsava-navy">
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
