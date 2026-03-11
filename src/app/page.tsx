@@ -47,9 +47,9 @@ export default async function Home() {
                   <div className="w-full bg-bsava-gray/10 aspect-video relative">
                     {product.mainImage?.fullpath ? (
                       <img 
-                        src={`http://localhost:8080${product.mainImage.fullpath}`} 
+                        src={`${process.env.NEXT_PUBLIC_PIMCORE_BASE_URL || 'http://35.246.89.127'}${product.mainImage.fullpath}`} 
                         alt={product.title} 
-                        className="absolute inset-0 w-full h-full object-cover" 
+                        className="absolute inset-0 w-full h-full object-contain p-4 bg-white" 
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center text-bsava-navy/20 font-bold uppercase text-[10px]">
