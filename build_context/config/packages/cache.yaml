@@ -1,0 +1,8 @@
+framework:
+    cache:
+        app: cache.adapter.filesystem
+        system: cache.adapter.system
+        pools:
+            pimcore.cache.pool:
+                adapter: cache.adapter.filesystem
+                tags: true

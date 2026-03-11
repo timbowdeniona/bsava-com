@@ -17,20 +17,20 @@ The easiest way to get Pimcore running on your local machine is using [Pimcore's
 
 ### Steps
 
-1. **Create a new directory for your Pimcore project:**
+1. **Navigate to the Pimcore Docker directory:**
    ```bash
-   mkdir pimcore-local && cd pimcore-local
+   cd docker-containers
    ```
 
 2. **Initialize a New Project via Docker:**
    Pimcore no longer uses a raw `docker-compose.yaml` file from a master branch. Instead, you create a new project via a temporary PHP container which downloads the latest skeleton or demo, including the `.yml` files needed. Run this to create a demo project in the current directory:
    ```bash
-   docker run -u $(id -u):$(id -g) --rm -v $(pwd):/var/www/html pimcore/pimcore:php8.2-latest composer create-project pimcore/demo my-project
+   docker run -u $(id -u):$(id -g) --rm -v $(pwd):/var/www/html pimcore/pimcore:php8.2-latest composer create-project pimcore/demo PIMCore
    ```
-   *(Note: This creates a new folder named `my-project`. Once it finishes, move into that folder: `cd my-project`)*
+   *(Note: This creates a new folder named `PIMCore`. Once it finishes, move into that folder: `cd PIMCore`)*
 
 3. **Configure Permissions and Start the Containers:**
-   Inside `my-project`, you'll find a generated `docker-compose.yaml` file. Start your containers:
+   Inside `PIMCore`, you'll find a generated `docker-compose.yaml` file. Start your containers:
    ```bash
    docker compose up -d
    ```

@@ -67,3 +67,25 @@ export interface TestimonialSkeleton {
     rating?: EntryFieldTypes.Integer;
   };
 }
+export interface NavigationItemSkeleton {
+  contentTypeId: 'navigationItem';
+  fields: {
+    label: EntryFieldTypes.Text;
+    url: EntryFieldTypes.Text;
+  };
+}
+
+export interface HeaderSkeleton {
+  contentTypeId: 'header';
+  fields: {
+    title: EntryFieldTypes.Text;
+    navigationItems: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<NavigationItemSkeleton>>;
+  };
+}
+
+export interface FooterSkeleton {
+  contentTypeId: 'footer';
+  fields: {
+    text: EntryFieldTypes.Text;
+  };
+}

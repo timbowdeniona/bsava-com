@@ -32,7 +32,7 @@ export const pimcoreFetch = async <T>(path: string, options: PimcoreRequestOptio
 export const pimcoreGraphQL = async <T>(query: string, variables: Record<string, unknown> = {}): Promise<T> => {
   const apiKey = env.PIMCORE_REST_API_TOKEN;
   // Standard Data Hub endpoint pattern: /pimcore-graphql-webservices/{configName}?apikey={key}
-  const path = `/pimcore-graphql-webservices/products?apikey=${apiKey}`;
+  const path = `/pimcore-graphql-webservices/bsava?apikey=${apiKey}`;
   const url = `${env.PIMCORE_BASE_URL.replace(/\/$/, '')}${path}`;
   
   const response = await fetch(url, {
@@ -58,71 +58,147 @@ export const pimcoreGraphQL = async <T>(query: string, variables: Record<string,
   return json.data;
 };
 
-export const getProducts = async (limit: number = 10): Promise<PimcoreProduct[]> => {
-  const rootPath = env.PIMCORE_PRODUCTS_ROOT_PATH;
+export const getProducts = async (limit: number = 20): Promise<PimcoreProduct[]> => {
+  // We'll perform a multi-class query to support the new specialized classes.
+  // Note: This assumes all classes are exposed via the 'products' Data Hub endpoint.
+  // Field names confirmed via introspection against /pimcore-graphql-webservices/bsava
   const query = `
-    query getProducts($first: Int, $filter: String) {
-      getProductListing(first: $first, filter: $filter) {
-        edges {
-          node {
-            id
-            productType
-            title
-            sku
-            description
-            mainImage {
-              fullpath
-            }
-            basePrice
-            author
-            isbn
-            publicationDate
-            startDate
-            endDate
-            location
-            swoogoId
-            brightspaceId
-            entitlementRequired
-          }
-        }
-      }
+    query getProducts($first: Int) {
+      getBookListing(first: $first) { totalCount edges { node { id title isbn description coverImage { fullpath } memberPrice nonMemberPrice } } }
+      getEbookListing(first: $first) { totalCount edges { node { id title isbn description coverImage { fullpath } memberPrice nonMemberPrice } } }
+      getEventListing(first: $first) { totalCount edges { node { id title description startDate endDate location memberPrice nonMemberPrice } } }
+      getCourseListing(first: $first) { totalCount edges { node { id title description startDate duration memberPrice nonMemberPrice } } }
+      getMembershipTierListing(first: $first) { totalCount edges { node { id name description annualFee tierType } } }
     }
   `;
   
-  // Filter by path matching the root folder
-  const filter = JSON.stringify({
-    path: { "$like": `${rootPath}%` }
-  });
+  try {
+    const data = await pimcoreGraphQL<any>(query, { first: limit });
+    
+    // Normalize different types into a common PimcoreProduct format
+    const products: PimcoreProduct[] = [];
+    
+    if (data.getBookListing) {
+      data.getBookListing.edges.forEach((edge: any) => {
+        products.push({
+          id: edge.node.id,
+          productType: 'Book',
+          title: edge.node.title,
+          sku: edge.node.isbn,
+          description: edge.node.description,
+          mainImage: edge.node.coverImage,
+          basePrice: edge.node.memberPrice
+        });
+      });
+    }
 
-  const data = await pimcoreGraphQL<{ getProductListing: { edges: { node: PimcoreProduct }[] } }>(query, { first: limit, filter });
-  return data.getProductListing.edges.map(edge => edge.node);
+    if (data.getEbookListing) {
+      data.getEbookListing.edges.forEach((edge: any) => {
+        products.push({
+          id: edge.node.id,
+          productType: 'EBook',
+          title: edge.node.title,
+          sku: edge.node.isbn, // Use ISBN for Ebooks
+          description: edge.node.description,
+          mainImage: edge.node.coverImage,
+          basePrice: edge.node.memberPrice
+        });
+      });
+    }
+
+    if (data.getEventListing) {
+      data.getEventListing.edges.forEach((edge: any) => {
+        products.push({
+          id: edge.node.id,
+          productType: 'Event',
+          title: edge.node.title,
+          sku: edge.node.startDate ? `EVENT-${edge.node.startDate}` : undefined,
+          description: edge.node.description,
+          mainImage: undefined,
+          basePrice: edge.node.memberPrice
+        });
+      });
+    }
+
+    if (data.getCourseListing) {
+      data.getCourseListing.edges.forEach((edge: any) => {
+        products.push({
+          id: edge.node.id,
+          productType: 'Course',
+          title: edge.node.title,
+          sku: edge.node.startDate ? `COURSE-${edge.node.startDate}` : undefined,
+          description: edge.node.description,
+          mainImage: undefined,
+          basePrice: edge.node.memberPrice
+        });
+      });
+    }
+
+    if (data.getMembershipTierListing) {
+      data.getMembershipTierListing.edges.forEach((edge: any) => {
+        products.push({
+          id: edge.node.id,
+          productType: 'Membership',
+          title: edge.node.name,
+          sku: edge.node.tierType ? `MEM-${edge.node.tierType}` : 'MEM-TIER',
+          description: edge.node.description,
+          mainImage: undefined,
+          basePrice: edge.node.annualFee
+        });
+      });
+    }
+
+    // Sort or shuffle? For now just return
+    return products.slice(0, limit);
+  } catch (err) {
+    // Fallback if the GraphQL endpoint doesn't support these specific listing types yet
+    console.warn('Multi-class fetch failed, attempting legacy getProductListing', err);
+    const legacyQuery = `
+      query getLegacyProducts($first: Int) {
+        getProductListing(first: $first) {
+          edges {
+            node {
+              id
+              productType
+              title
+              sku
+              description
+              mainImage { fullpath }
+              basePrice
+            }
+          }
+        }
+      }
+    `;
+    const data = await pimcoreGraphQL<any>(legacyQuery, { first: limit });
+    return data.getProductListing?.edges.map((e: any) => e.node) || [];
+  }
 };
 
 export const getPimcoreProduct = async (id: string | number): Promise<PimcoreProduct> => {
+  // Simplistic lookup by ID across types might need more complex logic in Data Hub
+  // For now, assume single product fetch still works via generic 'getProduct' if configured
   const query = `
     query getProduct($id: ID!) {
       getProduct(id: $id) {
         id
-        productType
-        title
-        sku
-        description
-        mainImage {
-          fullpath
-        }
-        basePrice
-        author
-        isbn
-        publicationDate
-        startDate
-        endDate
-        location
-        swoogoId
-        brightspaceId
-        entitlementRequired
+        ... on Book { title sku description coverImage { fullpath } memberPrice }
+        ... on Ebook { title isbn description coverImage { fullpath } memberPrice }
+        ... on Event { title sku description eventImage { fullpath } memberPrice }
+        ... on Course { title sku description courseImage { fullpath } memberPrice }
+        ... on MembershipTier { name description membershipImage { fullpath } annualFee }
       }
     }
   `;
-  const data = await pimcoreGraphQL<{ getProduct: PimcoreProduct }>(query, { id });
-  return data.getProduct;
+  const data = await pimcoreGraphQL<{ getProduct: any }>(query, { id });
+  const p = data.getProduct;
+  return {
+    id: p.id,
+    productType: 'Book', // Placeholder
+    title: p.title || p.name,
+    sku: p.sku || p.isbn,
+    description: p.description,
+    mainImage: p.coverImage || p.eventImage || p.courseImage || p.membershipImage,
+    basePrice: p.memberPrice || p.annualFee
+  };
 };

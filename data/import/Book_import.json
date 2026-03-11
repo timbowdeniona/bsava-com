@@ -1,0 +1,282 @@
+[
+    {
+        "title": "Textbook of Veterinary Nursing, 6th edition",
+        "description": "",
+        "isbn": "P00161",
+        "authors": "",
+        "memberPrice": 45.5,
+        "nonMemberPrice": 70.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Guide to the Use of Veterinary Medicines",
+        "description": "Member benefit: This book is included in the BSAVA App for all members with App access. This book is free to access for all",
+        "isbn": "digital only",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "All Manual Pack",
+        "description": "",
+        "isbn": "PK0001",
+        "authors": "",
+        "memberPrice": 2470.0,
+        "nonMemberPrice": 3800.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Canine and Feline Medicine Manual Pack",
+        "description": "",
+        "isbn": "PK0002",
+        "authors": "",
+        "memberPrice": 273.0,
+        "nonMemberPrice": 420.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Canine and Feline Surgery Manuals Pack",
+        "description": "",
+        "isbn": "PK0003",
+        "authors": "",
+        "memberPrice": 354.25,
+        "nonMemberPrice": 545.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Canine and Feline Imaging Manual Pack",
+        "description": "",
+        "isbn": "PK0004",
+        "authors": "",
+        "memberPrice": 263.25,
+        "nonMemberPrice": 405.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Foundation Manual Pack",
+        "description": "",
+        "isbn": "PK0005",
+        "authors": "",
+        "memberPrice": 292.5,
+        "nonMemberPrice": 450.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Canine and Feline ECC Manual Pack",
+        "description": "",
+        "isbn": "PK0006",
+        "authors": "",
+        "memberPrice": 266.5,
+        "nonMemberPrice": 410.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Veterinary nursing pack",
+        "description": "",
+        "isbn": "PK0007",
+        "authors": "",
+        "memberPrice": 143.0,
+        "nonMemberPrice": 220.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "BSAVA/SAMSoc Non-prescription pad",
+        "description": "",
+        "isbn": "P00170",
+        "authors": "",
+        "memberPrice": 3.79,
+        "nonMemberPrice": 5.83,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "BSAVA/SAMSoc Non-prescription pad - 10 pads",
+        "description": "",
+        "isbn": "P00171",
+        "authors": "",
+        "memberPrice": 19.5,
+        "nonMemberPrice": 30.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Poster Series: Bandaging Techniques",
+        "description": "",
+        "isbn": "PR0001",
+        "authors": "",
+        "memberPrice": 5.41,
+        "nonMemberPrice": 8.33,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Poster Series: Canine 'Ladder of Aggression'",
+        "description": "",
+        "isbn": "PR0004",
+        "authors": "",
+        "memberPrice": 8.13,
+        "nonMemberPrice": 12.5,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Poster Series: Canine castration - hints and tips",
+        "description": "",
+        "isbn": "PR0002",
+        "authors": "",
+        "memberPrice": 8.13,
+        "nonMemberPrice": 12.5,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Poster Series: Suture patterns",
+        "description": "",
+        "isbn": "PR0005",
+        "authors": "",
+        "memberPrice": 8.13,
+        "nonMemberPrice": 12.5,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "BSAVA/SAMSoc PROTECT ME poster: Antibiotic use in our practice (2023)",
+        "description": "",
+        "isbn": "PR0007",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 4.17,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "BSAVA/SAMSoc/RWA&F PROTECT ME poster: Antibiotic use in rabbits",
+        "description": "",
+        "isbn": "2024",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 4.17,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Rover - Fetch",
+        "description": "",
+        "isbn": "25 searches for members / 5 searches for non-members - refreshed every month",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Rover - Pack  - 25 queries",
+        "description": "",
+        "isbn": "no time limit on use",
+        "authors": "",
+        "memberPrice": 10.0,
+        "nonMemberPrice": 20.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Rover - Pack  - 50 queries",
+        "description": "",
+        "isbn": "no time limit on use",
+        "authors": "",
+        "memberPrice": 15.0,
+        "nonMemberPrice": 30.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Rover - Pack - 100 queries",
+        "description": "",
+        "isbn": "no time limit on use",
+        "authors": "",
+        "memberPrice": 25.0,
+        "nonMemberPrice": 50.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Rover - Unleashed - unlimited queries",
+        "description": "",
+        "isbn": "fair usage applies",
+        "authors": "",
+        "memberPrice": 30.0,
+        "nonMemberPrice": 75.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Rover - Unleashed - unlimited queries",
+        "description": "",
+        "isbn": "fair usage applies",
+        "authors": "",
+        "memberPrice": 330.0,
+        "nonMemberPrice": 825.0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Professional Key Skills - webinars",
+        "description": "",
+        "isbn": "Member exclusive",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "BSAVA App -5 BSAVA Publications - Formularies",
+        "description": "",
+        "isbn": "Canine and Feline & Exotics",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Corporate Practice - Library Access",
+        "description": "",
+        "isbn": "Plus PG Cert allowance for 1 partner",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Subscribing Institutions - Library Access - Includes library content and selected publications",
+        "description": "",
+        "isbn": "",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 0,
+        "coverImage": "",
+        "publishDate": ""
+    },
+    {
+        "title": "Companion Magazine",
+        "description": "",
+        "isbn": "Monthly",
+        "authors": "",
+        "memberPrice": 0,
+        "nonMemberPrice": 0,
+        "coverImage": "",
+        "publishDate": ""
+    }
+]

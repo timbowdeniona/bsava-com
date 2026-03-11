@@ -1,0 +1,11 @@
+doctrine:
+    dbal:
+        connections:
+            default:
+                driver: pdo_mysql
+                user: 'pimcore_user'
+                password: 'ChangeThisStrongPassword123!'
+                dbname: 'pimcore'
+                unix_socket: '/cloudsql/bsava-com:europe-west2:pimcore-db-instance'
+                charset: utf8mb4
+                server_version: '8.0'
