@@ -1,124 +1,144 @@
 # BSAVA MACH Migration Architecture
 
-## High-Level Architecture Diagram
-This diagram outlines the headless, composable MACH (Microservices, API-first, Cloud-native, Headless) architecture for the BSAVA website migration.
+This document provides a comprehensive overview of the headless, composable architecture being adopted for the BSAVA platform. It is split into two sections: the **Abstract Target Architecture** (the full ecosystem) and the **Current Implementation Status** (what is currently hooked up in this repository).
+
+---
+
+## 1. Abstract Target Architecture
+This diagram outlines the complete ecosystem of headless services that form the BSAVA MACH platform. It highlights the decoupled nature of the services and the central role of **SSO** and **CRM** in managing user identities and entitlements.
 
 ```mermaid
 flowchart TB
-    subaxis
+    %% Nodes
     User((User / Browser))
     
-    subgraph Frontend [Presentation Layer - Netlify]
-        NextJS[Next.js 14 App Router]
-        Edge[Netlify Edge Functions]
-        NextJS -- "Optimized Delivery" --> Edge
+    subgraph Presentation ["Presentation Layer (Headless Frontend)"]
+        direction TB
+        NextJS["Next.js (App Router)"]
+        Edge["Netlify Edge Runtime"]
+        NextJS --- Edge
     end
 
-    subgraph Headless CMS [Content Management]
-        Contentful[Contentful]
+    subgraph Identity ["Identity & CRM (The Core)"]
+        direction TB
+        Salesforce["Salesforce / Fonteva"]
+        SSO["SSO (SAML / OAuth 2.0)"]
+        Salesforce --- SSO
     end
 
-    subgraph PIM & DAM [Product Data - GCP Cloud Run]
-        PIMcore[Pimcore]
-        CloudSQL[(Cloud SQL)]
-        GCS[(Cloud Storage)]
-        PIMcore --> CloudSQL
-        PIMcore --> GCS
+    subgraph Content ["Content & Asset Management"]
+        Contentful["Contentful (CMS)"]
+        PIMcore["PIMcore (PIM/DAM)"]
     end
 
-    subgraph CRM & Identity [Identity & Entitlement]
-        Salesforce[Salesforce / Fonteva]
+    subgraph Commerce ["Commerce & Transactions"]
+        Stripe["Stripe (Payments)"]
+        Swoogo["Swoogo (Events)"]
+        Brightspace["Brightspace (LMS)"]
     end
 
-    subgraph Events [Event Management]
-        Swoogo[Swoogo]
+    subgraph Discovery ["Search & Insight"]
+        Algolia["Algolia (Search)"]
     end
 
-    subgraph Payments [Payment Gateway]
-        Stripe[Stripe]
-    end
-
-    subgraph Discovery [Search Engine]
-        Algolia[Algolia]
-    end
-
-    subgraph LMS [Learning Management System]
-        Brightspace[Brightspace]
-    end
-
-    %% User Interactions
-    User -- "Browses & Searches" --> NextJS
-    User -- "Authenticates" --> Salesforce
-
-    %% Frontend Data Fetching
-    NextJS -- "Fetches Articles/Pages (GraphQL/REST)" --> Contentful
-    NextJS -- "Fetches Products & Events (GraphQL/REST)" --> PIMcore
-    NextJS -- "Verifies Entitlements (OAuth/API)" --> Salesforce
-    NextJS -- "Queries Search Results" --> Algolia
-    NextJS -- "Event Registration API" --> Swoogo
-    NextJS -- "Fetches Courses & Progress API" --> Brightspace
-    NextJS -- "Processes Payments API" --> Stripe
-
-    %% Webhooks & Syncs
-    Contentful -- "Content Webhooks" --> Algolia
-    PIMcore -- "Product & Event Webhooks" --> Algolia
-    Swoogo -- "Syncs Events as Products" --> PIMcore
-    Brightspace -- "Syncs Courses as Products" --> PIMcore
-
-    classDef frontend fill:#000,stroke:#333,stroke-width:2px,color:#fff
-    classDef cms fill:#1798c1,stroke:#333,stroke-width:2px,color:#fff
-    classDef pim fill:#6B3D99,stroke:#333,stroke-width:2px,color:#fff
-    classDef crm fill:#00A1E0,stroke:#333,stroke-width:2px,color:#fff
-    classDef search fill:#5468FF,stroke:#333,stroke-width:2px,color:#fff
-    classDef events fill:#EA5A00,stroke:#333,stroke-width:2px,color:#fff
-    classDef payments fill:#635BFF,stroke:#333,stroke-width:2px,color:#fff
-    classDef lms fill:#00A859,stroke:#333,stroke-width:2px,color:#fff
+    %% Interactions
+    User -- "Browses / Searches" --> NextJS
+    User -- "Single Sign-On" --> SSO
     
-    class NextJS,Edge frontend
-    class Contentful cms
-    class PIMcore pim
-    class Salesforce crm
+    NextJS -- "GraphQL / REST" --> Contentful
+    NextJS -- "GraphQL / REST" --> PIMcore
+    NextJS -- "Verified Session" --> SSO
+    NextJS -- "Check Entitlements" --> Salesforce
+    NextJS -- "Instant Search" --> Algolia
+    NextJS -- "Registration API" --> Swoogo
+    NextJS -- "Checkout / Portal" --> Stripe
+    NextJS -- "Learn / Progress" --> Brightspace
+
+    %% Sync Flows
+    Contentful -- "Webhooks" --> Algolia
+    PIMcore -- "Webhooks" --> Algolia
+    Swoogo -- "Sync Events" --> PIMcore
+    Brightspace -- "Sync Courses" --> PIMcore
+
+    %% Styling
+    classDef presentation fill:#000,stroke:#333,stroke-width:2px,color:#fff
+    classDef identity fill:#00A1E0,stroke:#333,stroke-width:2px,color:#fff
+    classDef content fill:#1798c1,stroke:#333,stroke-width:2px,color:#fff
+    classDef commerce fill:#635BFF,stroke:#333,stroke-width:2px,color:#fff
+    classDef search fill:#5468FF,stroke:#333,stroke-width:2px,color:#fff
+    
+    class NextJS,Edge presentation
+    class Salesforce,SSO identity
+    class Contentful,PIMcore content
+    class Stripe,Swoogo,Brightspace commerce
     class Algolia search
-    class Swoogo events
-    class Stripe payments
-    class Brightspace lms
 ```
 
-## System Roles & Data Flows
+### Key Components:
+- **Presentation**: Decoupled React-based frontend hosted on Netlify.
+- **Identity & CRM**: **Salesforce** acts as the single source of truth for members. **SSO** provides a seamless login experience across the ecosystem.
+- **PIM & DAM**: **PIMcore** manages structured product data, including books, memberships, and digital assets.
+- **CMS**: **Contentful** manages marketing pages, news, and editorial content.
+- **Search**: **Algolia** provides sub-millisecond search across both content and products.
 
-### 1. Presentation Layer (Next.js 14 on Netlify)
-- **Role**: The decoupled frontend connecting all headless APIs. Renders the UI using Tailwind CSS and TypeScript.
-- **Data Flow**: Aggregates data from Contentful and PIMcore. Uses Netlify Edge Functions for fast, personalized delivery (e.g., checking geolocation or lightweight auth checks before rendering gated content).
+---
 
-### 2. Content Management (Contentful)
-- **Role**: Manages all unstructured content (pages, blogs, articles).
-- **Data Flow**: Exposes Content Delivery API (GraphQL/REST) to Next.js. Sends webhooks to Algolia whenever content is published or unpublished to keep the search index fresh.
+## 2. Current Implementation Status
+This diagram highlights what has been implemented and connected in the current codebase. Active integrations are highlighted in color, while future/planned integrations are shown in grayscale.
 
-### 3. Product Information & Digital Assets (PIMcore on GCP)
-- **Role**: The single source of truth for structured data (product catalogs, events, publications) and Digital Asset Management (DAM). Events are ingested from Swoogo and treated as products.
-- **Deployment**: Hosted on Google Cloud Run with Cloud SQL and Cloud Storage (GCS) to ensure a scalable, serverless containerized environment.
-- **Data Flow**: Exposes data to Next.js. Emits webhooks to Algolia upon product/event updates.
+```mermaid
+flowchart TB
+    %% Nodes
+    User((User))
+    
+    subgraph Frontend ["Implemented Frontend"]
+        direction TB
+        NextJS["Next.js App"]
+        Netlify["Netlify Hosting"]
+    end
 
-### 4. Search & Discovery (Algolia)
-- **Role**: Fast, relevant search and filtering across both content and products.
-- **Data Flow**: Ingests data directly from Contentful and PIMcore via webhooks. Next.js queries Algolia from the frontend or backend to display search results.
+    subgraph Implemented ["Active Integrations"]
+        direction TB
+        Contentful["Contentful (Articles/Pages)"]
+        PIMcore["PIMcore (Products/Assets)"]
+        Algolia["Algolia (Live Search)"]
+        Stripe["Stripe (Checkout Integration)"]
+    end
 
-### 5. CRM, Identity & Entitlement (Salesforce / Fonteva)
-- **Role**: Manages user accounts, memberships, and gated content access.
-- **Data Flow**: Acts as the Identity Provider. When a user requests gated content:
-  1. Next.js checks the session.
-  2. If unauthenticated, the user is redirected to Salesforce to log in.
-  3. Next.js queries Salesforce/Fonteva to verify if the user's membership allows access to the specific content or product.
-  4. Only upon successful entitlement check is the content served.
+    subgraph Future ["Future Integrations"]
+        direction TB
+        Salesforce["CRM (Salesforce)"]
+        SSO["SSO Implementation"]
+        Swoogo["Swoogo (Events API)"]
+        Brightspace["Brightspace (LMS API)"]
+    end
 
-### 6. Event Management (Swoogo)
-- **Role**: Manages event creation, registration logic, and attendee ticketing.
-- **Data Flow**: Next.js interacts directly with Swoogo APIs for event registration flows. Swoogo syncs event metadata into PIMcore, where the events are stored and structured as products for Algolia indexing and general catalogue listing.
+    %% Interactions
+    User --> NextJS
+    NextJS -- "Hooks" --> Contentful
+    NextJS -- "GraphQL" --> PIMcore
+    NextJS -- "Client SDK" --> Algolia
+    NextJS -- "Server API" --> Stripe
 
-### 7. Payments (Stripe)
-- **Role**: The payment gateway for handling financial transactions (e.g., event tickets, store purchases, membership dues).
-- **Data Flow**: Integrated into Next.js using Stripe Elements/APIs to securely process payments and confirm transactions.
+    %% Future Links
+    NextJS -.-> Salesforce
+    NextJS -.-> SSO
+    NextJS -.-> Swoogo
+    NextJS -.-> Brightspace
 
-### 8. Learning Management (Brightspace)
-- **Role**: Headless Learning Management System providing online courses, certifications, and progress tracking.
-- **Data Flow**: Next.js interacts with Brightspace APIs for enrollment and learning experiences. Courses sync to PIMcore where they are treated as products, enabling indexing in Algolia and consistent discovery across the ecosystem. Entitlement to gated courses is verified via Salesforce.
+    %% Styling
+    classDef active fill:#00A859,stroke:#333,stroke-width:2px,color:#fff
+    classDef core fill:#6B3D99,stroke:#333,stroke-width:2px,color:#fff
+    classDef future stroke-dasharray: 5 5, fill:#f9f9f9,stroke:#999,color:#999
+    
+    class NextJS,Netlify active
+    class Contentful,PIMcore,Algolia,Stripe core
+    class Salesforce,SSO,Swoogo,Brightspace future
+```
+
+### Summary of Implementation:
+1.  **Next.js Frontend**: Fully configured with App Router, Tailwind CSS, and global state management.
+2.  **Contentful**: Integrated with a robust fetching library ([contentful.ts](file:///home/timbowden/dev/bsava-com/src/lib/contentful.ts)) for news and page content.
+3.  **PIMcore**: Successfully connected via GraphQL/REST ([pimcore.ts](file:///home/timbowden/dev/bsava-com/src/lib/pimcore.ts)) to serve the product catalogue.
+4.  **Algolia**: Search UI and client-side indexing hooks are in place.
+5.  **Stripe**: Checkout session creation and basic bundling logic are implemented in the API routes.
