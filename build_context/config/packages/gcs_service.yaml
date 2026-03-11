@@ -1,0 +1,5 @@
+services:
+    google.storage.client:
+        class: Google\Cloud\Storage\StorageClient
+        arguments:
+            - projectId: '%env(string:GOOGLE_CLOUD_PROJECT)%'

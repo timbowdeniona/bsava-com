@@ -1,0 +1,5 @@
+pimcore:
+    assets:
+        frontend_prefixes:
+            source: 'https://storage.googleapis.com/%env(GCS_BUCKET_NAME)%/assets'
+            thumbnail: 'https://storage.googleapis.com/%env(GCS_BUCKET_NAME)%/thumbnails'

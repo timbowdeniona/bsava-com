@@ -7,19 +7,6 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="border-b border-bsava-gray px-8 py-4 flex justify-between items-center max-w-[1360px] mx-auto">
-        <div className="text-bsava-navy font-bold text-2xl tracking-tighter">
-          BSAVA
-        </div>
-        <nav className="flex gap-8 items-center font-inter text-bsava-navy font-semibold uppercase text-sm">
-          <Link href="#" className="hover:text-bsava-blue">Membership</Link>
-          <Link href="#" className="hover:text-bsava-blue">Education</Link>
-          <Link href="#" className="hover:text-bsava-blue">Publications</Link>
-          <Link href="/products" className="hover:text-bsava-blue">Products</Link>
-          <button className="bg-bsava-blue text-white px-6 py-2 uppercase">MyBSAVA</button>
-        </nav>
-      </header>
 
       {/* Hero */}
       <main className="max-w-[1360px] mx-auto px-8 py-16">
@@ -92,32 +79,6 @@ export default async function Home() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-bsava-navy text-white py-12 px-8 mt-16">
-        <div className="max-w-[1360px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 opacity-80 font-inter text-sm uppercase font-semibold">
-          <div className="flex flex-col gap-4">
-            <span className="font-bold border-b border-white/20 pb-2">About BSAVA</span>
-            <Link href="#">Who we are</Link>
-            <Link href="#">Governance</Link>
-            <Link href="#">Contact Us</Link>
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="font-bold border-b border-white/20 pb-2">Membership</span>
-            <Link href="#">Categories</Link>
-            <Link href="#">Renew</Link>
-            <Link href="#">Benefits</Link>
-          </div>
-          <div className="flex flex-col gap-4">
-            <span className="font-bold border-b border-white/20 pb-2">Connect</span>
-            <Link href="#">Facebook</Link>
-            <Link href="#">Twitter</Link>
-            <Link href="#">Instagram</Link>
-          </div>
-          <div className="text-xs normal-case opacity-60">
-            &copy; 2026 British Small Animal Veterinary Association (BSAVA). All rights reserved. Registered Charity No. 267159.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

@@ -2,7 +2,7 @@ export interface PimcoreProduct {
   id: string | number;
   productType: 'Book' | 'Event' | 'EBook' | 'Membership' | 'Course';
   title: string;
-  sku: string;
+  sku?: string;
   description?: string;
   mainImage?: {
     fullpath: string;

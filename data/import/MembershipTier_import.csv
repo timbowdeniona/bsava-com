@@ -1,0 +1,13 @@
+name,tierType,annualFee,description,benefits
+Vet Membership,vet,299.0,,
+First Year Qualified Vet Membership,vet,119.0,,
+Second Year Qualified Vet Membership,vet,169.0,,
+Third Year Qualified Vet Membership,vet,209.0,,
+Postgraduate Membership,vet,199.0,,
+Veterinary Nurse Membership,vet,99.0,,
+Overseas Vet Membership,vet,149.0,,
+Vet Student Membership,vet,0,,
+Vet Student Plus Membership,vet,20.0,,
+Veterinary Nurse Student Membership,vet,0,,
+Concessionary Membership,vet,0,,
+Retired Member,vet,0,,
