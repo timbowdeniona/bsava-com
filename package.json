@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@commercelayer/sdk": "^7.9.0",
     "@contentful/rich-text-plain-text-renderer": "^17.1.6",
     "@contentful/rich-text-react-renderer": "^16.1.6",
     "@stripe/stripe-js": "^8.9.0",

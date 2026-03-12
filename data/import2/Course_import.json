@@ -1,0 +1,222 @@
+[
+  {
+    "sku": "CPD-REG-IP-FREE",
+    "title": "Regional In-Person CPD (2 hours) - Free for Members",
+    "courseType": "regional-cpd",
+    "memberPrice": 0,
+    "nonMemberPrice": 40.0,
+    "description": "2-hour regional in-person CPD session",
+    "duration": "2 hours",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "CPD-REG-IP-RED",
+    "title": "Regional In-Person CPD (2 hours) - Reduced Non-Member Rate",
+    "courseType": "regional-cpd",
+    "memberPrice": 0,
+    "nonMemberPrice": 20.0,
+    "description": "2-hour regional in-person CPD session at reduced non-member rate",
+    "duration": "2 hours",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "CPD-REG-ONL",
+    "title": "Regional Online CPD (2 hours)",
+    "courseType": "regional-cpd",
+    "memberPrice": 0,
+    "nonMemberPrice": 25.0,
+    "description": "2-hour regional online CPD session",
+    "duration": "2 hours",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "CPD-REG-ONL-RED",
+    "title": "Regional Online CPD (2 hours) - Reduced Non-Member Rate",
+    "courseType": "regional-cpd",
+    "memberPrice": 0,
+    "nonMemberPrice": 15.0,
+    "description": "2-hour regional online CPD session at reduced non-member rate",
+    "duration": "2 hours",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "CPD-REG-FD",
+    "title": "Regional In-Person Full Day - Vet and Veterinary Nurse",
+    "courseType": "regional-cpd",
+    "memberPrice": 200.0,
+    "nonMemberPrice": 450.0,
+    "description": "Full day regional in-person CPD",
+    "duration": "1 day",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "CPD-WEBINAR-CR",
+    "title": "Clinical Rounds - Monthly Live Webinar",
+    "courseType": "webinar",
+    "memberPrice": 0,
+    "nonMemberPrice": 0,
+    "description": "Member benefit: Monthly live webinar for vet members",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "PGC-SAS",
+    "title": "Postgraduate Certificate - Small Animal Surgery (3 years)",
+    "courseType": "postgraduate-certificate",
+    "memberPrice": 0,
+    "nonMemberPrice": 12945.0,
+    "description": "3-year PG Certificate in Small Animal Surgery. January intake. 35 places.",
+    "duration": "3 years",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "PGC-SAM",
+    "title": "Postgraduate Certificate - Small Animal Medicine (3 years)",
+    "courseType": "postgraduate-certificate",
+    "memberPrice": 0,
+    "nonMemberPrice": 12945.0,
+    "description": "3-year PG Certificate in Small Animal Medicine. January intake. 35 places.",
+    "duration": "3 years",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "PGC-SADI",
+    "title": "Postgraduate Certificate - Small Animal Diagnostic Imaging (3 years)",
+    "courseType": "postgraduate-certificate",
+    "memberPrice": 0,
+    "nonMemberPrice": 12945.0,
+    "description": "3-year PG Certificate in Small Animal Diagnostic Imaging. January intake. 35 places.",
+    "duration": "3 years",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "PGC-SAECC",
+    "title": "Postgraduate Certificate - Small Animal Emergency and Critical Care (3 years)",
+    "courseType": "postgraduate-certificate",
+    "memberPrice": 0,
+    "nonMemberPrice": 12945.0,
+    "description": "3-year PG Certificate in Small Animal ECC. May intake. 35 places.",
+    "duration": "3 years",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "PGC-OPTH",
+    "title": "Postgraduate Certificate - Ophthalmology (3 years)",
+    "courseType": "postgraduate-certificate",
+    "memberPrice": 0,
+    "nonMemberPrice": 12945.0,
+    "description": "3-year PG Certificate in Ophthalmology. May intake. 35 places.",
+    "duration": "3 years",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "MSC-CVR",
+    "title": "Masters in Clinical Veterinary Research (2 years)",
+    "courseType": "masters",
+    "memberPrice": 0,
+    "nonMemberPrice": 7020.0,
+    "description": "2-year Masters in Clinical Veterinary Research. Rolling enrolment.",
+    "duration": "2 years",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "DISP-COURSE",
+    "title": "Dispensing Course",
+    "courseType": "dispensing",
+    "memberPrice": 178.8,
+    "nonMemberPrice": 264.0,
+    "description": "BSAVA Dispensing Course. May and October intakes.",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "LUMOS-FOUND",
+    "title": "LUMOS Foundation Course",
+    "courseType": "lumos",
+    "memberPrice": 0,
+    "nonMemberPrice": 300.0,
+    "description": "LUMOS Foundation level course",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "LUMOS-INT",
+    "title": "LUMOS Intermediate Course",
+    "courseType": "lumos",
+    "memberPrice": 0,
+    "nonMemberPrice": 350.0,
+    "description": "LUMOS Intermediate level course",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "LUMOS-ADV",
+    "title": "LUMOS Advanced Course",
+    "courseType": "lumos",
+    "memberPrice": 0,
+    "nonMemberPrice": 400.0,
+    "description": "LUMOS Advanced level course",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "LUMOS-FOUND-MEM",
+    "title": "LUMOS Foundation Course - Member Rate",
+    "courseType": "lumos",
+    "memberPrice": 0,
+    "nonMemberPrice": 100.0,
+    "description": "LUMOS Foundation level course at member rate",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "LUMOS-INT-MEM",
+    "title": "LUMOS Intermediate Course - Member Rate",
+    "courseType": "lumos",
+    "memberPrice": 0,
+    "nonMemberPrice": 200.0,
+    "description": "LUMOS Intermediate level course at member rate",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "LUMOS-ADV-MEM",
+    "title": "LUMOS Advanced Course - Member Rate",
+    "courseType": "lumos",
+    "memberPrice": 0,
+    "nonMemberPrice": 300.0,
+    "description": "LUMOS Advanced level course at member rate",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  },
+  {
+    "sku": "LUMOS-CORE",
+    "title": "LUMOS Core Skills",
+    "courseType": "lumos",
+    "memberPrice": 0,
+    "nonMemberPrice": 300.0,
+    "description": "LUMOS Core Skills course for vets and veterinary nurses",
+    "duration": "",
+    "startDate": "",
+    "onlineUrl": ""
+  }
+]

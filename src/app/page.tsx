@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { getPimcoreImageUrl } from "@/lib/images";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const products = await getProducts(3).catch(() => []);
 

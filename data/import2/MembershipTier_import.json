@@ -1,0 +1,98 @@
+[
+  {
+    "sku": "MEM-VET",
+    "name": "Vet Membership",
+    "tierType": "vet",
+    "annualFee": 299.0,
+    "description": "Full membership for qualified veterinary surgeons",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-VET-Y1",
+    "name": "First Year Qualified Vet Membership",
+    "tierType": "vet",
+    "annualFee": 119.0,
+    "description": "Discounted membership for vets in their first year of qualification",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-VET-Y2",
+    "name": "Second Year Qualified Vet Membership",
+    "tierType": "vet",
+    "annualFee": 169.0,
+    "description": "Discounted membership for vets in their second year of qualification",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-VET-Y3",
+    "name": "Third Year Qualified Vet Membership",
+    "tierType": "vet",
+    "annualFee": 209.0,
+    "description": "Discounted membership for vets in their third year of qualification",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-VET-PG",
+    "name": "Postgraduate Membership",
+    "tierType": "vet",
+    "annualFee": 199.0,
+    "description": "Membership for vets holding non-BSAVA postgraduate certificates",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-NURSE",
+    "name": "Veterinary Nurse Membership",
+    "tierType": "nurse",
+    "annualFee": 99.0,
+    "description": "Full membership for qualified veterinary nurses",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-VET-OS",
+    "name": "Overseas Vet Membership",
+    "tierType": "vet",
+    "annualFee": 149.0,
+    "description": "Membership for veterinary surgeons based outside the UK",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-STU-VET",
+    "name": "Vet Student Membership",
+    "tierType": "student",
+    "annualFee": 0.0,
+    "description": "Free membership for veterinary students",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-STU-VET-PLUS",
+    "name": "Vet Student Plus Membership",
+    "tierType": "student",
+    "annualFee": 20.0,
+    "description": "Enhanced membership for veterinary students with additional benefits",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-STU-NURSE",
+    "name": "Veterinary Nurse Student Membership",
+    "tierType": "student",
+    "annualFee": 0.0,
+    "description": "Free membership for veterinary nursing students",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-CON",
+    "name": "Concessionary Membership",
+    "tierType": "vet",
+    "annualFee": 0.0,
+    "description": "33-50% discount membership. Criteria apply - application approval required by BSAVA Membership Services Team",
+    "benefits": ""
+  },
+  {
+    "sku": "MEM-RET",
+    "name": "Retired Member",
+    "tierType": "vet",
+    "annualFee": 0.0,
+    "description": "Membership for retired veterinary professionals",
+    "benefits": ""
+  }
+]

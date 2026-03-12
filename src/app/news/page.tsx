@@ -12,6 +12,8 @@ const formatDate = (dateStr?: string) => {
   });
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function NewsPage() {
   const articles = await getLatestArticles(24).catch(() => []);
 

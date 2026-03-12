@@ -1,0 +1,1029 @@
+{
+  "class": [
+    {
+      "id": "MembershipTier",
+      "title": "MembershipTier",
+      "description": "BSAVA Membership Tier definitions",
+      "modificationDate": 1773157535,
+      "parentClass": "",
+      "implementsInterfaces": "",
+      "listingParentClass": "",
+      "useTraits": "",
+      "listingUseTraits": "",
+      "allowInherit": false,
+      "allowVariants": false,
+      "showVariants": false,
+      "layoutDefinitions": {
+        "name": "pimcore_root",
+        "type": null,
+        "region": null,
+        "title": null,
+        "width": 0,
+        "height": 0,
+        "collapsible": false,
+        "collapsed": false,
+        "bodyStyle": null,
+        "datatype": "layout",
+        "locked": false,
+        "fieldtype": "panel",
+        "layout": null,
+        "border": false,
+        "icon": null,
+        "labelWidth": 100,
+        "labelAlign": "left",
+        "children": [
+          {
+            "name": "Main",
+            "type": null,
+            "region": null,
+            "title": "Main",
+            "width": 0,
+            "height": 0,
+            "collapsible": false,
+            "collapsed": false,
+            "bodyStyle": null,
+            "datatype": "layout",
+            "locked": false,
+            "fieldtype": "panel",
+            "layout": null,
+            "border": false,
+            "icon": null,
+            "labelWidth": 100,
+            "labelAlign": "left",
+            "children": [
+              {
+                "fieldtype": "input",
+                "name": "sku",
+                "title": "SKU",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false,
+                "unique": true,
+                "index": true
+              },
+              {
+                "fieldtype": "input",
+                "name": "name",
+                "title": "Name",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "select",
+                "name": "tierType",
+                "title": "Tier Type",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false,
+                "options": [
+                  {
+                    "key": "Vet",
+                    "value": "vet"
+                  },
+                  {
+                    "key": "Nurse",
+                    "value": "nurse"
+                  },
+                  {
+                    "key": "Student",
+                    "value": "student"
+                  }
+                ]
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "annualFee",
+                "title": "Annual Fee",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "textarea",
+                "name": "description",
+                "title": "Description",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "wysiwyg",
+                "name": "benefits",
+                "title": "Benefits",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "image",
+                "name": "cardImage",
+                "title": "Card Image",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              }
+            ]
+          }
+        ]
+      },
+      "icon": "",
+      "group": "BSAVA",
+      "showAppLoggerTab": false,
+      "linkGeneratorReference": "",
+      "previewGeneratorReference": "",
+      "compositeIndices": [],
+      "showFieldLookup": false,
+      "propertyVisibility": {
+        "grid": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        },
+        "search": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        }
+      },
+      "enableGridLocking": false,
+      "name": "MembershipTier"
+    },
+    {
+      "id": "Event",
+      "title": "Event",
+      "description": "BSAVA Events including Congress, Regional and Webinars",
+      "modificationDate": 1773157535,
+      "parentClass": "",
+      "implementsInterfaces": "",
+      "listingParentClass": "",
+      "useTraits": "",
+      "listingUseTraits": "",
+      "allowInherit": false,
+      "allowVariants": false,
+      "showVariants": false,
+      "layoutDefinitions": {
+        "name": "pimcore_root",
+        "type": null,
+        "region": null,
+        "title": null,
+        "width": 0,
+        "height": 0,
+        "collapsible": false,
+        "collapsed": false,
+        "bodyStyle": null,
+        "datatype": "layout",
+        "locked": false,
+        "fieldtype": "panel",
+        "layout": null,
+        "border": false,
+        "icon": null,
+        "labelWidth": 100,
+        "labelAlign": "left",
+        "children": [
+          {
+            "name": "Main",
+            "type": null,
+            "region": null,
+            "title": "Main",
+            "width": 0,
+            "height": 0,
+            "collapsible": false,
+            "collapsed": false,
+            "bodyStyle": null,
+            "datatype": "layout",
+            "locked": false,
+            "fieldtype": "panel",
+            "layout": null,
+            "border": false,
+            "icon": null,
+            "labelWidth": 100,
+            "labelAlign": "left",
+            "children": [
+              {
+                "fieldtype": "input",
+                "name": "sku",
+                "title": "SKU",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false,
+                "unique": true,
+                "index": true
+              },
+              {
+                "fieldtype": "input",
+                "name": "title",
+                "title": "Title",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "select",
+                "name": "eventType",
+                "title": "Event Type",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false,
+                "options": [
+                  {
+                    "key": "Congress",
+                    "value": "congress"
+                  },
+                  {
+                    "key": "Regional",
+                    "value": "regional"
+                  },
+                  {
+                    "key": "Webinar",
+                    "value": "webinar"
+                  },
+                  {
+                    "key": "Alba",
+                    "value": "alba"
+                  },
+                  {
+                    "key": "Cymru",
+                    "value": "cymru"
+                  }
+                ]
+              },
+              {
+                "fieldtype": "date",
+                "name": "startDate",
+                "title": "Start Date",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "date",
+                "name": "endDate",
+                "title": "End Date",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "location",
+                "title": "Location",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "onlineUrl",
+                "title": "Online URL",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "wysiwyg",
+                "name": "description",
+                "title": "Description",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "memberPrice",
+                "title": "Member Price",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "nonMemberPrice",
+                "title": "Non-Member Price",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "image",
+                "name": "cardImage",
+                "title": "Card Image",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              }
+            ]
+          }
+        ]
+      },
+      "icon": "",
+      "group": "BSAVA",
+      "showAppLoggerTab": false,
+      "linkGeneratorReference": "",
+      "previewGeneratorReference": "",
+      "compositeIndices": [],
+      "showFieldLookup": false,
+      "propertyVisibility": {
+        "grid": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        },
+        "search": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        }
+      },
+      "enableGridLocking": false,
+      "name": "Event"
+    },
+    {
+      "id": "Course",
+      "title": "Course",
+      "description": "BSAVA CPD Courses, Webinars and Postgraduate programmes",
+      "modificationDate": 1773157535,
+      "parentClass": "",
+      "implementsInterfaces": "",
+      "listingParentClass": "",
+      "useTraits": "",
+      "listingUseTraits": "",
+      "allowInherit": false,
+      "allowVariants": false,
+      "showVariants": false,
+      "layoutDefinitions": {
+        "name": "pimcore_root",
+        "type": null,
+        "region": null,
+        "title": null,
+        "width": 0,
+        "height": 0,
+        "collapsible": false,
+        "collapsed": false,
+        "bodyStyle": null,
+        "datatype": "layout",
+        "locked": false,
+        "fieldtype": "panel",
+        "layout": null,
+        "border": false,
+        "icon": null,
+        "labelWidth": 100,
+        "labelAlign": "left",
+        "children": [
+          {
+            "name": "Main",
+            "type": null,
+            "region": null,
+            "title": "Main",
+            "width": 0,
+            "height": 0,
+            "collapsible": false,
+            "collapsed": false,
+            "bodyStyle": null,
+            "datatype": "layout",
+            "locked": false,
+            "fieldtype": "panel",
+            "layout": null,
+            "border": false,
+            "icon": null,
+            "labelWidth": 100,
+            "labelAlign": "left",
+            "children": [
+              {
+                "fieldtype": "input",
+                "name": "sku",
+                "title": "SKU",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false,
+                "unique": true,
+                "index": true
+              },
+              {
+                "fieldtype": "input",
+                "name": "title",
+                "title": "Title",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "select",
+                "name": "courseType",
+                "title": "Course Type",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false,
+                "options": [
+                  {
+                    "key": "Webinar",
+                    "value": "webinar"
+                  },
+                  {
+                    "key": "Regional CPD",
+                    "value": "regional-cpd"
+                  },
+                  {
+                    "key": "Postgraduate Certificate",
+                    "value": "postgraduate-certificate"
+                  },
+                  {
+                    "key": "Masters",
+                    "value": "masters"
+                  },
+                  {
+                    "key": "Dispensing",
+                    "value": "dispensing"
+                  },
+                  {
+                    "key": "LUMOS",
+                    "value": "lumos"
+                  }
+                ]
+              },
+              {
+                "fieldtype": "date",
+                "name": "startDate",
+                "title": "Start Date",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "duration",
+                "title": "Duration",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "wysiwyg",
+                "name": "description",
+                "title": "Description",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "memberPrice",
+                "title": "Member Price",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "nonMemberPrice",
+                "title": "Non-Member Price",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "onlineUrl",
+                "title": "Online URL",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "image",
+                "name": "cardImage",
+                "title": "Card Image",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              }
+            ]
+          }
+        ]
+      },
+      "icon": "",
+      "group": "BSAVA",
+      "showAppLoggerTab": false,
+      "linkGeneratorReference": "",
+      "previewGeneratorReference": "",
+      "compositeIndices": [],
+      "showFieldLookup": false,
+      "propertyVisibility": {
+        "grid": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        },
+        "search": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        }
+      },
+      "enableGridLocking": false,
+      "name": "Course"
+    },
+    {
+      "id": "Book",
+      "title": "Book",
+      "description": "BSAVA printed books and manuals",
+      "modificationDate": 1773157535,
+      "parentClass": "",
+      "implementsInterfaces": "",
+      "listingParentClass": "",
+      "useTraits": "",
+      "listingUseTraits": "",
+      "allowInherit": false,
+      "allowVariants": false,
+      "showVariants": false,
+      "layoutDefinitions": {
+        "name": "pimcore_root",
+        "type": null,
+        "region": null,
+        "title": null,
+        "width": 0,
+        "height": 0,
+        "collapsible": false,
+        "collapsed": false,
+        "bodyStyle": null,
+        "datatype": "layout",
+        "locked": false,
+        "fieldtype": "panel",
+        "layout": null,
+        "border": false,
+        "icon": null,
+        "labelWidth": 100,
+        "labelAlign": "left",
+        "children": [
+          {
+            "name": "Main",
+            "type": null,
+            "region": null,
+            "title": "Main",
+            "width": 0,
+            "height": 0,
+            "collapsible": false,
+            "collapsed": false,
+            "bodyStyle": null,
+            "datatype": "layout",
+            "locked": false,
+            "fieldtype": "panel",
+            "layout": null,
+            "border": false,
+            "icon": null,
+            "labelWidth": 100,
+            "labelAlign": "left",
+            "children": [
+              {
+                "fieldtype": "input",
+                "name": "sku",
+                "title": "SKU",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false,
+                "unique": true,
+                "index": true
+              },
+              {
+                "fieldtype": "input",
+                "name": "title",
+                "title": "Title",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "isbn",
+                "title": "ISBN",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "authors",
+                "title": "Authors",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "wysiwyg",
+                "name": "description",
+                "title": "Description",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "memberPrice",
+                "title": "Member Price",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "nonMemberPrice",
+                "title": "Non-Member Price",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "image",
+                "name": "coverImage",
+                "title": "Cover Image",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "date",
+                "name": "publishDate",
+                "title": "Publish Date",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              }
+            ]
+          }
+        ]
+      },
+      "icon": "",
+      "group": "BSAVA",
+      "showAppLoggerTab": false,
+      "linkGeneratorReference": "",
+      "previewGeneratorReference": "",
+      "compositeIndices": [],
+      "showFieldLookup": false,
+      "propertyVisibility": {
+        "grid": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        },
+        "search": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        }
+      },
+      "enableGridLocking": false,
+      "name": "Book"
+    },
+    {
+      "id": "Ebook",
+      "title": "Ebook",
+      "description": "BSAVA digital books and manuals",
+      "modificationDate": 1773157535,
+      "parentClass": "",
+      "implementsInterfaces": "",
+      "listingParentClass": "",
+      "useTraits": "",
+      "listingUseTraits": "",
+      "allowInherit": false,
+      "allowVariants": false,
+      "showVariants": false,
+      "layoutDefinitions": {
+        "name": "pimcore_root",
+        "type": null,
+        "region": null,
+        "title": null,
+        "width": 0,
+        "height": 0,
+        "collapsible": false,
+        "collapsed": false,
+        "bodyStyle": null,
+        "datatype": "layout",
+        "locked": false,
+        "fieldtype": "panel",
+        "layout": null,
+        "border": false,
+        "icon": null,
+        "labelWidth": 100,
+        "labelAlign": "left",
+        "children": [
+          {
+            "name": "Main",
+            "type": null,
+            "region": null,
+            "title": "Main",
+            "width": 0,
+            "height": 0,
+            "collapsible": false,
+            "collapsed": false,
+            "bodyStyle": null,
+            "datatype": "layout",
+            "locked": false,
+            "fieldtype": "panel",
+            "layout": null,
+            "border": false,
+            "icon": null,
+            "labelWidth": 100,
+            "labelAlign": "left",
+            "children": [
+              {
+                "fieldtype": "input",
+                "name": "sku",
+                "title": "SKU",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false,
+                "unique": true,
+                "index": true
+              },
+              {
+                "fieldtype": "input",
+                "name": "title",
+                "title": "Title",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "isbn",
+                "title": "ISBN",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "authors",
+                "title": "Authors",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": true,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "wysiwyg",
+                "name": "description",
+                "title": "Description",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "memberPrice",
+                "title": "Member Price",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "numeric",
+                "name": "nonMemberPrice",
+                "title": "Non-Member Price",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "image",
+                "name": "coverImage",
+                "title": "Cover Image",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "date",
+                "name": "publishDate",
+                "title": "Publish Date",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "input",
+                "name": "downloadUrl",
+                "title": "Download URL",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": false,
+                "visibleSearch": false,
+                "mandatory": false
+              },
+              {
+                "fieldtype": "select",
+                "name": "fileFormat",
+                "title": "File Format",
+                "datatype": "data",
+                "noteditable": false,
+                "invisible": false,
+                "visibleGridView": true,
+                "visibleSearch": false,
+                "mandatory": false,
+                "options": [
+                  {
+                    "key": "PDF",
+                    "value": "pdf"
+                  },
+                  {
+                    "key": "ePub",
+                    "value": "epub"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "icon": "",
+      "group": "BSAVA",
+      "showAppLoggerTab": false,
+      "linkGeneratorReference": "",
+      "previewGeneratorReference": "",
+      "compositeIndices": [],
+      "showFieldLookup": false,
+      "propertyVisibility": {
+        "grid": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        },
+        "search": {
+          "id": true,
+          "key": false,
+          "path": true,
+          "published": true,
+          "modificationDate": true,
+          "creationDate": true
+        }
+      },
+      "enableGridLocking": false,
+      "name": "Ebook"
+    }
+  ]
+}
