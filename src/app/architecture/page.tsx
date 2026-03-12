@@ -2,72 +2,164 @@ import fs from 'fs';
 import path from 'path';
 import Mermaid from '../components/Mermaid';
 
+type ContentBlock = {
+  type: 'markdown' | 'mermaid' | 'h1' | 'h2' | 'h3' | 'hr';
+  content: string;
+};
+
 export default async function ArchitecturePage() {
   const filePath = path.join(process.cwd(), 'BSAVA_MACH_ARCHITECTURE_DIAGRAM.md');
   const fileContent = fs.readFileSync(filePath, 'utf8');
 
-  // Simple parser to extract mermaid and text
-  const mermaidMatch = fileContent.match(/```mermaid([\s\S]*?)```/);
-  const mermaidChart = mermaidMatch ? mermaidMatch[1].trim() : '';
-  
-  const sections = fileContent.split('##').slice(1).map(section => {
-    const lines = section.trim().split('\n');
-    const title = lines[0].trim();
-    const content = lines.slice(1).join('\n').replace(/```mermaid[\s\S]*?```/, '').trim();
-    return { title, content };
-  });
+  // Improved parser to handle multiple types of blocks in order
+  const parseContent = (content: string): ContentBlock[] => {
+    const blocks: ContentBlock[] = [];
+    const lines = content.split('\n');
+    let currentMarkdown = '';
+    let inMermaid = false;
+    let mermaidContent = '';
+
+    const pushMarkdown = () => {
+      if (currentMarkdown.trim()) {
+        blocks.push({ type: 'markdown', content: currentMarkdown.trim() });
+        currentMarkdown = '';
+      }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      if (line.startsWith('```mermaid')) {
+        pushMarkdown();
+        inMermaid = true;
+        mermaidContent = '';
+        continue;
+      }
+
+      if (inMermaid) {
+        if (line.trim() === '```') {
+          inMermaid = false;
+          blocks.push({ type: 'mermaid', content: mermaidContent.trim() });
+          continue;
+        }
+        mermaidContent += line + '\n';
+        continue;
+      }
+
+      if (line.startsWith('# ')) {
+        pushMarkdown();
+        blocks.push({ type: 'h1', content: line.replace('# ', '').trim() });
+      } else if (line.startsWith('## ')) {
+        pushMarkdown();
+        blocks.push({ type: 'h2', content: line.replace('## ', '').trim() });
+      } else if (line.startsWith('### ')) {
+        pushMarkdown();
+        blocks.push({ type: 'h3', content: line.replace('### ', '').trim() });
+      } else if (line.trim() === '---') {
+        pushMarkdown();
+        blocks.push({ type: 'hr', content: '' });
+      } else {
+        currentMarkdown += line + '\n';
+      }
+    }
+    pushMarkdown();
+    return blocks;
+  };
+
+  const blocks = parseContent(fileContent);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-
-      <main className="max-w-[1360px] mx-auto px-8 py-12">
-        <div className="mb-12">
-          <h1 className="text-4xl font-black text-bsava-navy mb-4 tracking-tight">
-            System Architecture
+    <div className="min-h-screen bg-[#f8fbff]">
+      {/* Dynamic Header */}
+      <div className="bg-bsava-navy py-16 px-8 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div className="max-w-5xl mx-auto relative z-10">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="px-3 py-1 bg-bsava-blue text-white text-xs font-bold uppercase tracking-widest rounded">Technical Doc</span>
+            <div className="h-px flex-1 bg-white/20"></div>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6">
+            System <span className="text-bsava-blue">Architecture</span>
           </h1>
-          <p className="text-lg text-slate-600 max-w-3xl">
-            A comprehensive overview of the BSAVA MACH (Microservices, API-first, Cloud-native, Headless) ecosystem, 
-            detailing the integration between Next.js, Contentful, Pimcore, and third-party services.
+          <p className="text-xl text-slate-300 max-w-3xl leading-relaxed font-light">
+            A comprehensive overview of the BSAVA MACH ecosystem, detailing the integration between 
+            Next.js, Contentful, Pimcore, and Commerce Layer.
           </p>
         </div>
+      </div>
 
-        {/* Diagram Section */}
-        <div className="mb-20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-bsava-navy uppercase tracking-widest border-l-4 border-bsava-blue pl-4">
-              Flowchart Visualization
-            </h2>
-            <div className="flex gap-2">
-              <span className="px-3 py-1 bg-bsava-blue/10 text-bsava-blue text-xs font-bold rounded-full">MACH Architecture</span>
-              <span className="px-3 py-1 bg-bsava-orange/10 text-bsava-orange text-xs font-bold rounded-full">Live Reference</span>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-            <div className="p-8 lg:p-12 overflow-x-auto bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed">
-              <Mermaid chart={mermaidChart} />
-            </div>
-          </div>
-        </div>
-
-        {/* Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {sections.map((section, idx) => (
-            <div key={idx} className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
-              <h3 className="text-lg font-bold text-bsava-navy mb-4 flex items-center gap-2">
-                <span className="w-8 h-8 rounded-lg bg-bsava-blue/10 text-bsava-blue flex items-center justify-center text-xs">
-                  0{idx + 1}
-                </span>
-                {section.title}
-              </h3>
-              <div className="text-slate-600 leading-relaxed text-sm font-inter whitespace-pre-line">
-                {section.content}
-              </div>
-            </div>
-          ))}
+      <main className="max-w-5xl mx-auto px-8 py-16">
+        <div className="space-y-12">
+          {blocks.map((block, idx) => {
+            switch (block.type) {
+              case 'h1':
+                return null; // Handled in hero
+              case 'h2':
+                return (
+                  <div key={idx} className="pt-12 first:pt-0">
+                    <h2 className="text-3xl font-black text-bsava-navy mb-6 flex items-center gap-4">
+                      <span className="w-12 h-1 bg-bsava-blue rounded-full"></span>
+                      {block.content}
+                    </h2>
+                  </div>
+                );
+              case 'h3':
+                return (
+                  <h3 key={idx} className="text-xl font-bold text-bsava-navy mt-10 mb-4 pl-4 border-l-4 border-bsava-orange">
+                    {block.content}
+                  </h3>
+                );
+              case 'hr':
+                return <hr key={idx} className="border-slate-200 my-16" />;
+              case 'mermaid':
+                return (
+                  <div key={idx} className="my-8 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden transform hover:scale-[1.01] transition-transform duration-300">
+                    <div className="bg-slate-50 border-b border-slate-100 px-6 py-3 flex justify-between items-center">
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Logic Visualization</span>
+                      <div className="flex gap-1.5">
+                        <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
+                        <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
+                        <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
+                      </div>
+                    </div>
+                    <div className="p-4 md:p-8 lg:p-12 overflow-x-auto">
+                      <Mermaid chart={block.content} />
+                    </div>
+                  </div>
+                );
+              case 'markdown':
+                return (
+                  <div key={idx} className="prose prose-slate max-w-none">
+                    <p className="text-slate-600 leading-relaxed whitespace-pre-line text-lg font-inter">
+                      {block.content}
+                    </p>
+                  </div>
+                );
+              default:
+                return null;
+            }
+          })}
         </div>
       </main>
 
+      {/* Footer Meta */}
+      <footer className="bg-white border-t border-slate-200 py-12 px-8">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-slate-400 text-sm">
+            Generated from <code className="bg-slate-100 px-2 py-1 rounded text-bsava-navy">BSAVA_MACH_ARCHITECTURE_DIAGRAM.md</code>
+          </div>
+          <div className="flex gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-bsava-blue"></div>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-tighter">MACH Standard</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-bsava-orange"></div>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-tighter">Live Reference</span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
