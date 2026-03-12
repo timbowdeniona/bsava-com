@@ -32,6 +32,7 @@ flowchart TB
     end
 
     subgraph Commerce ["Commerce & Transactions"]
+        CommerceLayer["Commerce Layer (OMS)"]
         Stripe["Stripe (Payments)"]
         Swoogo["Swoogo (Events)"]
         Brightspace["Brightspace (LMS)"]
@@ -45,18 +46,20 @@ flowchart TB
     User -- "Browses / Searches" --> NextJS
     User -- "Single Sign-On" --> SSO
     
+    NextJS -- "Cart & Order API" --> CommerceLayer
     NextJS -- "GraphQL / REST" --> Contentful
     NextJS -- "GraphQL / REST" --> PIMcore
     NextJS -- "Verified Session" --> SSO
     NextJS -- "Check Entitlements" --> Salesforce
     NextJS -- "Instant Search" --> Algolia
     NextJS -- "Registration API" --> Swoogo
-    NextJS -- "Checkout / Portal" --> Stripe
+    CommerceLayer -- "Triggers Payment" --> Stripe
     NextJS -- "Learn / Progress" --> Brightspace
 
     %% Sync Flows
     Contentful -- "Webhooks" --> Algolia
     PIMcore -- "Webhooks" --> Algolia
+    PIMcore -- "Price/Stock Sync" --> CommerceLayer
     Swoogo -- "Sync Events" --> PIMcore
     Brightspace -- "Sync Courses" --> PIMcore
 
@@ -70,7 +73,7 @@ flowchart TB
     class NextJS,Edge presentation
     class Salesforce,SSO identity
     class Contentful,PIMcore content
-    class Stripe,Swoogo,Brightspace commerce
+    class CommerceLayer,Stripe,Swoogo,Brightspace commerce
     class Algolia search
 ```
 
@@ -79,6 +82,7 @@ flowchart TB
 - **Identity & CRM**: **Salesforce** acts as the single source of truth for members. **SSO** provides a seamless login experience across the ecosystem.
 - **PIM & DAM**: **PIMcore** manages structured product data, including books, memberships, and digital assets.
 - **CMS**: **Contentful** manages marketing pages, news, and editorial content.
+- **Commerce & Transactions**: **Commerce Layer** handles the shopping cart, order management (OMS), and fulfilment logic. **Stripe** handles secure payments.
 - **Search**: **Algolia** provides sub-millisecond search across both content and products.
 
 ---
@@ -107,6 +111,7 @@ flowchart TB
 
     subgraph Future ["Future Integrations"]
         direction TB
+        CommerceLayer["Commerce Layer (OMS)"]
         Salesforce["CRM (Salesforce)"]
         SSO["SSO Implementation"]
         Swoogo["Swoogo (Events API)"]
@@ -121,6 +126,7 @@ flowchart TB
     NextJS -- "Server API" --> Stripe
 
     %% Future Links
+    NextJS -.-> CommerceLayer
     NextJS -.-> Salesforce
     NextJS -.-> SSO
     NextJS -.-> Swoogo
@@ -133,7 +139,7 @@ flowchart TB
     
     class NextJS,Netlify active
     class Contentful,PIMcore,Algolia,Stripe core
-    class Salesforce,SSO,Swoogo,Brightspace future
+    class CommerceLayer,Salesforce,SSO,Swoogo,Brightspace future
 ```
 
 ### Summary of Implementation:
