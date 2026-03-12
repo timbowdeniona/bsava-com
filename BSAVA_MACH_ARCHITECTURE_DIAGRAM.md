@@ -148,3 +148,114 @@ flowchart TB
 3.  **PIMcore**: Successfully connected via GraphQL/REST ([pimcore.ts](file:///home/timbowden/dev/bsava-com/src/lib/pimcore.ts)) to serve the product catalogue.
 4.  **Algolia**: Search UI and client-side indexing hooks are in place.
 5.  **Stripe**: Checkout session creation and basic bundling logic are implemented in the API routes.
+
+---
+
+## 3. User Journeys & Interaction Flows
+
+These diagrams show how the various components of the MACH architecture interact during specific user scenarios.
+
+### A. Non-Member Searches for Information
+A visitor searches the site for clinical resources or news.
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant N as Next.js (Frontend)
+    participant A as Algolia (Search)
+    participant C as Contentful (CMS)
+
+    U->>N: Enters search query
+    N->>A: Queries search index
+    A-->>N: Returns results (Metadata + Snippets)
+    N-->>U: Displays search results
+    U->>N: Clicks on an Article
+    N->>C: Fetches full article content (GraphQL)
+    C-->>N: Returns Content Model
+    N-->>U: Renders Page
+```
+
+### B. Non-Member Purchases Membership
+A visitor signs up for a BSAVA membership to access gated benefits.
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant N as Next.js
+    participant CL as Commerce Layer (OMS)
+    participant S as Stripe (Payments)
+    participant SF as Salesforce (CRM)
+
+    U->>N: Selects Membership Level
+    N->>CL: Adds Membership SKU to Cart
+    U->>N: Enters Guest Info & Proceeds to Checkout
+    N->>CL: Creates Order & Fetches Payment Intent
+    CL->>S: Initializes Payment
+    U->>S: Provides Payment Details (Stripe Elements)
+    S-->>CL: Payment Success Webhook
+    CL-->>N: Order Confirmed
+    CL->>SF: Trigger Provisioning (Create Member Record)
+    N-->>U: Show Success & Welcome Message
+```
+
+### C. Member Buys a Book
+An authenticated member purchases a physical publication using member pricing.
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant SSO as Auth (SSO)
+    participant N as Next.js
+    participant P as PIMcore (PIM)
+    participant CL as Commerce Layer (OMS)
+
+    U->>SSO: Authenticates
+    SSO-->>N: Returns Session + MemberID
+    U->>N: Navigates to Book Catalog
+    N->>P: Fetches Book Detail + Member Price
+    N-->>U: Shows Discounted Price
+    U->>N: Adds to Cart
+    N->>CL: Updates Cart with MemberID context
+    N->>CL: Completes Checkout
+    CL-->>N: Confirmation
+    N-->>U: Order Success
+```
+
+### D. Member Books an Event
+An existing member registers for a CPD event or conference.
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant N as Next.js
+    participant A as Algolia
+    participant SW as Swoogo (Events)
+    participant SF as Salesforce
+
+    U->>N: Filters Events
+    N->>A: Search via "events" index
+    A-->>N: Returns filtered events
+    U->>N: Clicks "Register"
+    N->>SW: Sync Member Data & Open Registration API
+    SW-->>N: Returns Registration Flow
+    U->>SW: Completes Registration Logic
+    SW->>SF: Updates Contact History (fonteva)
+    SW-->>N: Event Registration Success
+    N-->>U: Show "My Events" Update
+```
+
+### E. Member Studies a Course
+A member accesses their learning dashboard to continue an online course.
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant N as Next.js
+    participant SF as Salesforce (Entitlements)
+    participant BS as Brightspace (LMS)
+
+    U->>N: Opens "My Learning" Portal
+    N->>SF: Verifies Membership Status & Course Access
+    SF-->>N: Access Granted
+    N->>BS: Fetches Enrolled Courses & Progress
+    BS-->>N: Returns Course List + Progress %
+    U->>N: Clicks "Resume Course"
+    N->>BS: Requests Secure Course Launcher
+    BS-->>N: Returns Signed SSO URL
+    N-->>U: Redirects/Embeds Course Player
+```
