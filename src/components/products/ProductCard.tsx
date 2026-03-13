@@ -276,7 +276,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.title}
         </h3>
 
-        <p className="min-h-[84px] font-inter text-[14px] leading-[1.5] text-[#1d1c1d]">
+        <p className="min-h-[63px] font-inter text-[14px] leading-[1.5] text-[#1d1c1d]">
           {excerpt}
         </p>
 
@@ -297,7 +297,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           </div>
 
-          <div className="min-h-[21px] font-inter text-[14px] italic leading-[1.5] text-[#747474]">
+          <div className="min-h-[21px] font-inter text-[14px] leading-[1.5] text-[#747474]">
             {meta ?? ""}
           </div>
         </div>
@@ -305,7 +305,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <button
           type="button"
           onClick={() => addItem(product)}
-          className="mt-auto inline-flex w-fit items-center justify-center bg-[#1d1c1d] p-[20px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-white transition-colors hover:bg-black"
+          className="mt-auto inline-flex w-fit items-center justify-center bg-[#1d1c1d] px-[20px] py-[15px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-white transition-colors hover:bg-black"
         >
           More details
         </button>

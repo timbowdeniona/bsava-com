@@ -2,7 +2,7 @@ const FILTER_LABELS = ["Books", "eBooks", "Events", "Courses", "Membership"] as 
 
 export default function ProductsHero() {
   return (
-    <section className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 overflow-hidden bg-white">
+    <section className="overflow-hidden bg-white">
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-[30px] px-6 pb-0 pt-[40px] text-center md:px-10">
         <h1 className="font-bsava-display text-[34px] leading-[1.02] tracking-[-0.05em] text-[#1d1c1d] md:text-[42px] lg:text-[48px]">
           Resources

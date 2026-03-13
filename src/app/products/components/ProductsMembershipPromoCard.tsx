@@ -13,10 +13,10 @@ export default function ProductsMembershipPromoCard() {
             alt="BSAVA membership promotional card"
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 66vw, 50vw"
-            className="object-cover object-[132%_center]"
+            className="object-cover object-[78%_center] md:scale-[1.33] md:object-[120%_37px]"
             priority
           />
-          <span className="absolute bottom-0 left-0 rounded-tr-[4px] bg-white px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
+          <span className="absolute bottom-0 left-0 z-[4] rounded-tr-[4px] bg-white px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
             Membership
           </span>
         </div>
@@ -46,7 +46,7 @@ export default function ProductsMembershipPromoCard() {
               </div>
 
               <div className="flex min-w-[110px] flex-col">
-                <span className="font-inter text-[14px] leading-[1.5] text-[#1d1c1d]">
+                <span className="font-inter text-[14px] leading-[1.5] text-white">
                   Membership:
                 </span>
                 <span className="font-inter text-[14px] font-semibold leading-[1.5] text-[#1d1c1d]">

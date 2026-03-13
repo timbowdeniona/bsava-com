@@ -10,8 +10,6 @@ export default async function ProductsPage() {
   const gridProducts = products.filter(
     (product) => product.productType !== 'Membership' && !/rover/i.test(product.title)
   );
-  const leadingProducts = gridProducts.slice(0, 7);
-  const trailingProducts = gridProducts.slice(7);
 
   return (
     <div className="min-h-screen bg-white">
@@ -22,15 +20,11 @@ export default async function ProductsPage() {
             <>
               <ProductsMembershipPromoCard />
 
-              {leadingProducts.map((product) => (
+              {gridProducts.map((product) => (
                 <ProductCard key={`${product.id}-${product.productType}`} product={product} />
               ))}
 
               {roverProduct ? <ProductsRoverPromoCard product={roverProduct} /> : null}
-
-              {trailingProducts.map((product) => (
-                <ProductCard key={`${product.id}-${product.productType}`} product={product} />
-              ))}
             </>
           ) : (
             <div className="col-span-full border-2 border-dashed border-bsava-gray p-20 text-center">
