@@ -3,32 +3,16 @@ import NewsSummary from "@/app/components/NewsSummary";
 import Link from "next/link";
 import Image from "next/image";
 import { getPimcoreImageUrl } from "@/lib/images";
+import HomeHero from "@/components/HomeHero";
 
 export default async function Home() {
   const products = await getProducts(3).catch(() => []);
 
   return (
     <div className="min-h-screen bg-white">
+      <HomeHero />
 
-      {/* Hero */}
-      <main className="max-w-[1360px] mx-auto px-8 py-16">
-        <section className="mb-16">
-          <h1 className="text-5xl font-bold text-bsava-navy mb-6 tracking-tight">
-            British Small Animal Veterinary Association
-          </h1>
-          <p className="text-xl text-bsava-navy max-w-2xl font-inter mb-8">
-            Providing resources, education, and representation for small animal veterinary professionals across the UK.
-          </p>
-          <div className="flex gap-4">
-            <Link href="/products" className="bg-bsava-orange text-white px-8 py-3 uppercase font-bold text-lg inline-block">
-              Explore Our Resources
-            </Link>
-            <button className="border-2 border-bsava-light-blue text-bsava-light-blue px-8 py-3 uppercase font-bold text-lg">
-              Education Portal
-            </button>
-          </div>
-        </section>
-
+      <div className="mx-auto max-w-[1360px] px-8 py-16">
         {/* Latest News from Contentful */}
         <section id="news" className="mb-20">
           <h2 className="text-2xl font-bold text-bsava-navy mb-8 uppercase tracking-widest border-b-2 border-bsava-orange inline-block pb-2">
@@ -81,9 +65,7 @@ export default async function Home() {
             )}
           </div>
         </section>
-      </main>
-
+      </div>
     </div>
   );
 }
-
