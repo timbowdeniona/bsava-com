@@ -25,12 +25,12 @@ export default function HomeHero() {
         />
 
         <div className="relative mx-auto flex min-h-[380px] max-w-[1376px] items-end px-6 py-10 md:min-h-[420px] md:px-10 md:py-12 lg:min-h-[442px] lg:items-center lg:px-12 lg:py-12 xl:px-16">
-          <div className="w-full max-w-[592px] lg:ml-auto">
+          <div className="w-full max-w-[610px] lg:ml-auto lg:w-[610px]">
             <h1 className="font-bsava-display text-[34px] leading-[1.02] tracking-[-0.05em] text-white md:text-[40px] lg:text-[48px]">
               British Small Animal Veterinary Association
             </h1>
 
-            <p className="mt-5 max-w-[592px] font-inter text-[18px] font-semibold leading-[1.4] text-white md:text-[19px] lg:mt-6 lg:text-[20px]">
+            <p className="mt-5 max-w-[610px] font-inter text-[18px] font-semibold leading-[1.4] text-white md:text-[19px] lg:mt-6 lg:text-[20px]">
               Providing resources, education, and representation for small animal
               veterinary professionals across the UK.
             </p>
