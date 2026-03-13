@@ -7,14 +7,17 @@ import ProductsRoverPromoCard from './components/ProductsRoverPromoCard';
 export default async function ProductsPage() {
   const products = await getProducts(24).catch(() => []);
   const roverProduct = products.find((product) => /rover/i.test(product.title));
-  const leadingProducts = products.slice(0, 8);
-  const trailingProducts = products.slice(8);
+  const gridProducts = products.filter(
+    (product) => product.productType !== 'Membership' && !/rover/i.test(product.title)
+  );
+  const leadingProducts = gridProducts.slice(0, 7);
+  const trailingProducts = gridProducts.slice(7);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white">
       <ProductsHero />
-      <main className="mx-auto max-w-[1440px] px-8 py-12 md:py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <main className="mx-auto max-w-[1372px] px-6 pb-16 pt-10 md:px-10 md:pb-20">
+        <div className="grid justify-center gap-x-[30px] gap-y-[38px] md:grid-cols-2 xl:grid-cols-[repeat(4,300px)]">
           {products.length > 0 ? (
             <>
               <ProductsMembershipPromoCard />

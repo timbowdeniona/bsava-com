@@ -7,9 +7,9 @@ import type { PimcoreProduct } from "@/types/pimcore";
 
 const ROVER_PROMO_LOGO_URL = "/figma/products-rover-logo.svg";
 
-const formatPrice = (price?: number) => {
-  if (price === undefined || price === null) return "£FREE";
-  if (price === 0) return "£FREE";
+const formatPrice = (price?: number, freeLabel = "£FREE") => {
+  if (price === undefined || price === null) return freeLabel;
+  if (price === 0) return freeLabel;
   return `£${price.toFixed(2)}`;
 };
 
@@ -29,7 +29,7 @@ export default function ProductsRoverPromoCard({ product }: { product: PimcorePr
             priority
           />
 
-          <span className="absolute bottom-0 left-0 bg-white px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
+          <span className="absolute bottom-0 left-0 rounded-tr-[4px] bg-white px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
             AI Tool
           </span>
         </div>
@@ -52,7 +52,10 @@ export default function ProductsRoverPromoCard({ product }: { product: PimcorePr
                   Non-members:
                 </span>
                 <span className="font-inter text-[14px] font-semibold leading-[1.5] text-[#1d1c1d]">
-                  {formatPrice(product.nonMemberPrice)}
+                  {formatPrice(product.nonMemberPrice, "From £0.25")}
+                </span>
+                <span className="font-inter text-[11px] leading-[1.35] text-[#747474]">
+                  per query
                 </span>
               </div>
 
@@ -64,10 +67,11 @@ export default function ProductsRoverPromoCard({ product }: { product: PimcorePr
                   {formatPrice(product.memberPrice)}
                 </span>
                 <span className="font-inter text-[11px] leading-[1.35] text-[#747474]">
-                  {product.title}
+                  up to 25 queries/month
                 </span>
               </div>
             </div>
+            <div className="min-h-[21px]" aria-hidden="true" />
           </div>
 
           <button
