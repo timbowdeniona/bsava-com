@@ -128,12 +128,42 @@ export default async function ArchitecturePage() {
                   </div>
                 );
               case 'markdown':
+                const processMarkdown = (text: string) => {
+                  // Bold processing
+                  const processed = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                  
+                  // Handle bulleted lists
+                  const lines = processed.split('\n');
+                  const result = [];
+                  let inList = false;
+
+                  for (const line of lines) {
+                    if (line.trim().startsWith('- ')) {
+                      if (!inList) {
+                        result.push('<ul class="list-disc pl-6 space-y-2 my-4 text-slate-600">');
+                        inList = true;
+                      }
+                      result.push('<li class="leading-relaxed">' + line.trim().substring(2) + '</li>');
+                    } else {
+                      if (inList) {
+                        result.push('</ul>');
+                        inList = false;
+                      }
+                      if (line.trim()) {
+                        result.push('<p class="text-slate-600 leading-relaxed mb-4">' + line + '</p>');
+                      }
+                    }
+                  }
+                  if (inList) result.push('</ul>');
+                  return result.join('');
+                };
+
                 return (
-                  <div key={idx} className="prose prose-slate max-w-none">
-                    <p className="text-slate-600 leading-relaxed whitespace-pre-line text-lg font-inter">
-                      {block.content}
-                    </p>
-                  </div>
+                  <div 
+                    key={idx} 
+                    className="prose prose-slate max-w-none text-lg font-inter"
+                    dangerouslySetInnerHTML={{ __html: processMarkdown(block.content) }}
+                  />
                 );
               default:
                 return null;
