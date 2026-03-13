@@ -15,15 +15,22 @@ export default function Mermaid({ chart }: { chart: string }) {
       import('mermaid').then((mermaid) => {
         mermaid.default.initialize({
           startOnLoad: true,
-          theme: 'base',
+          theme: 'neutral',
           themeVariables: {
             primaryColor: '#0073b8',
             primaryTextColor: '#fff',
             primaryBorderColor: '#001f36',
-            lineColor: '#0073b8',
+            lineColor: '#334155', // slate-700 for better visibility of lines
             secondaryColor: '#ffa347',
             tertiaryColor: '#59abd3',
             fontFamily: 'var(--font-inter), sans-serif',
+            // Sequence diagram specific
+            signalColor: '#334155',
+            signalTextColor: '#334155',
+            labelTextColor: '#334155',
+            loopTextColor: '#334155',
+            noteTextColor: '#334155',
+            noteBkgColor: '#fffbeb', // amber-50
           },
           securityLevel: 'loose',
         });

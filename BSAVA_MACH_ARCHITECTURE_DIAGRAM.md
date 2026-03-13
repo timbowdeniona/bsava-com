@@ -21,7 +21,7 @@ flowchart TB
 
     subgraph Identity ["Identity & CRM (The Core)"]
         direction TB
-        Salesforce["Salesforce / Fonteva"]
+        Salesforce["Salesforce"]
         SSO["SSO (SAML / OAuth 2.0)"]
         Salesforce --- SSO
     end
@@ -235,7 +235,7 @@ sequenceDiagram
     N->>SW: Sync Member Data & Open Registration API
     SW-->>N: Returns Registration Flow
     U->>SW: Completes Registration Logic
-    SW->>SF: Updates Contact History (fonteva)
+    SW->>SF: Updates Contact History
     SW-->>N: Event Registration Success
     N-->>U: Show "My Events" Update
 ```
