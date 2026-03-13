@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 const FIGMA_HERO_IMAGE_URL =
   "/figma/bsava-home-hero-node-14-47.png";
 
@@ -36,22 +34,6 @@ export default function HomeHero() {
               Providing resources, education, and representation for small animal
               veterinary professionals across the UK.
             </p>
-
-            <div className="mt-8 flex flex-wrap gap-4 lg:mt-10">
-              <Link
-                href="/products"
-                className="inline-flex min-h-[52px] items-center justify-center bg-bsava-orange px-6 py-3 text-center text-sm font-bold uppercase tracking-[0.16em] text-white transition-colors hover:bg-[#ffb468] md:px-8"
-              >
-                Explore Our Resources
-              </Link>
-
-              <button
-                type="button"
-                className="inline-flex min-h-[52px] items-center justify-center border border-white/70 bg-white/10 px-6 py-3 text-center text-sm font-bold uppercase tracking-[0.16em] text-white backdrop-blur-[2px] transition-colors hover:bg-white hover:text-bsava-navy md:px-8"
-              >
-                Education Portal
-              </button>
-            </div>
           </div>
         </div>
       </div>
