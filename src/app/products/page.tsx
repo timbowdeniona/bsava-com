@@ -9,7 +9,7 @@ export default async function ProductsPage() {
   const roverProduct = products.find((product) => /rover/i.test(product.title));
   const gridProducts = products.filter(
     (product) => product.productType !== 'Membership' && !/rover/i.test(product.title)
-  );
+  ).slice(0, 8);
 
   return (
     <div className="min-h-screen bg-white">
