@@ -6,7 +6,7 @@
   --color-bsava-orange: #ffa347;
   --color-bsava-gray: #e0e0e0;
 
-  --font-inter: var(--font-inter);
+  --font-inter: var(--font-inter-ui);
 }
 
 :root {

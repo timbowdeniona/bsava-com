@@ -86,7 +86,7 @@ async function setupContentful() {
     console.log('Creating Header entry...');
     const headerEntry = await environment.createEntry('header', {
       fields: {
-        title: { 'en-US': 'Main Header' },
+        title: { 'en-US': 'Internal Proof of Concept & Documentation' },
         navigationItems: {
           'en-US': navEntries.map((entry) => ({
             sys: { type: 'Link', linkType: 'Entry', id: entry.sys.id },
