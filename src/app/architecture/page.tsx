@@ -1,5 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+
+import { PageContainer, PageHero, SectionHeading, SurfaceCard } from '@/components/page/PagePrimitives';
 import Mermaid from '../components/Mermaid';
 
 export default async function ArchitecturePage() {
@@ -18,56 +20,56 @@ export default async function ArchitecturePage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white">
+      <PageHero
+        title="System Architecture"
+        description="An overview of the BSAVA MACH ecosystem, showing how Next.js, Contentful, Pimcore, Algolia, and supporting services fit together."
+      />
 
-      <main className="max-w-[1360px] mx-auto px-8 py-12">
-        <div className="mb-12">
-          <h1 className="text-4xl font-black text-bsava-navy mb-4 tracking-tight">
-            System Architecture
-          </h1>
-          <p className="text-lg text-slate-600 max-w-3xl">
-            A comprehensive overview of the BSAVA MACH (Microservices, API-first, Cloud-native, Headless) ecosystem, 
-            detailing the integration between Next.js, Contentful, Pimcore, and third-party services.
-          </p>
-        </div>
-
-        {/* Diagram Section */}
-        <div className="mb-20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-bsava-navy uppercase tracking-widest border-l-4 border-bsava-blue pl-4">
-              Flowchart Visualization
-            </h2>
+      <PageContainer className="flex flex-col gap-14 pb-16 md:gap-16 md:pb-20">
+        <section className="flex flex-col gap-8">
+          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <SectionHeading
+              title="Architecture Flow"
+              description="A visual reference for the service relationships, integrations, and delivery paths used across the application."
+            />
             <div className="flex gap-2">
-              <span className="px-3 py-1 bg-bsava-blue/10 text-bsava-blue text-xs font-bold rounded-full">MACH Architecture</span>
-              <span className="px-3 py-1 bg-bsava-orange/10 text-bsava-orange text-xs font-bold rounded-full">Live Reference</span>
+              <span className="inline-flex items-center justify-center bg-[#1d1c1d]/8 px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
+                MACH Architecture
+              </span>
+              <span className="inline-flex items-center justify-center bg-[#1d1c1d]/8 px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
+                Live Reference
+              </span>
             </div>
           </div>
-          
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
-            <div className="p-8 lg:p-12 overflow-x-auto bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed">
-              <Mermaid chart={mermaidChart} />
-            </div>
-          </div>
-        </div>
 
-        {/* Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <SurfaceCard className="overflow-x-auto p-8 lg:p-12">
+            <Mermaid chart={mermaidChart} />
+          </SurfaceCard>
+        </section>
+
+        <section className="flex flex-col gap-8">
+          <SectionHeading
+            title="System Details"
+            description="Supporting notes extracted from the architecture document."
+          />
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
           {sections.map((section, idx) => (
-            <div key={idx} className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group">
-              <h3 className="text-lg font-bold text-bsava-navy mb-4 flex items-center gap-2">
-                <span className="w-8 h-8 rounded-lg bg-bsava-blue/10 text-bsava-blue flex items-center justify-center text-xs">
+            <SurfaceCard key={idx} className="p-8">
+              <h3 className="mb-4 flex items-center gap-3 font-inter text-[18px] font-extrabold leading-[1.35] text-[#1d1c1d]">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1d1c1d]/8 font-inter text-[12px] font-semibold text-[#1d1c1d]">
                   0{idx + 1}
                 </span>
                 {section.title}
               </h3>
-              <div className="text-slate-600 leading-relaxed text-sm font-inter whitespace-pre-line">
+              <div className="font-inter text-[14px] leading-[1.6] text-[#5d5d5d] whitespace-pre-line">
                 {section.content}
               </div>
-            </div>
+            </SurfaceCard>
           ))}
-        </div>
-      </main>
-
+          </div>
+        </section>
+      </PageContainer>
     </div>
   );
 }

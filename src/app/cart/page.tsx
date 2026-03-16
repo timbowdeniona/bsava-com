@@ -1,10 +1,12 @@
 'use client';
 
-import { useCart } from '@/lib/store/useCart';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+
+import { EmptyState, PageContainer, PageHero, SectionHeading, SurfaceCard } from '@/components/page/PagePrimitives';
 import { getPimcoreImageUrl } from '@/lib/images';
+import { useCart } from '@/lib/store/useCart';
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, clearCart } = useCart();
@@ -45,9 +47,10 @@ export default function CartPage() {
       } else {
         throw new Error('No checkout URL received from server');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Checkout error:', error);
-      alert(`Checkout Error: ${error.message}`);
+      const message = error instanceof Error ? error.message : 'Unknown checkout error';
+      alert(`Checkout Error: ${message}`);
     } finally {
       setIsCheckingOut(false);
     }
@@ -55,111 +58,161 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="max-w-4xl mx-auto p-8 min-h-screen flex flex-col items-center justify-center gap-6 bg-white">
-        <h1 className="text-3xl font-bold text-bsava-navy">Your Basket is Empty</h1>
-        <p className="text-gray-600">Browse our products and events to add them to your basket.</p>
-        <Link href="/products" className="bg-bsava-blue text-white px-8 py-3 rounded-md font-bold hover:bg-bsava-navy transition-colors">
-          Browse Products
-        </Link>
+      <div className="min-h-screen bg-white">
+        <PageHero
+          title="Your Basket"
+          description="Review the resources and events you have added before checkout."
+        />
+        <PageContainer className="pb-16 md:pb-20">
+          <EmptyState
+            title="Your basket is empty"
+            description="Browse our resources and events to add them to your basket."
+            actionHref="/products"
+            actionLabel="Browse Resources"
+          />
+        </PageContainer>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-8 min-h-screen bg-white">
-      <div className="flex justify-between items-end border-b border-gray-200 pb-6 mb-8">
-        <h1 className="text-4xl font-bold text-bsava-navy uppercase tracking-tight">Your Basket</h1>
-        <button onClick={clearCart} className="text-red-600 hover:text-red-800 text-sm font-semibold transition-colors">
-          Clear All
-        </button>
-      </div>
+    <div className="min-h-screen bg-white">
+      <PageHero
+        title="Your Basket"
+        description="Review your selected resources and confirm quantities before checkout."
+      />
 
-      <div className="flex flex-col gap-8">
-        {items.map((item) => (
-          <div key={item.id} className="flex gap-6 border-b border-gray-100 pb-8">
-            <div className="relative w-24 h-32 bg-gray-50 flex-shrink-0 rounded-md overflow-hidden">
-              {item.mainImage?.fullpath && (
-                <Image
-                  src={getPimcoreImageUrl(item.mainImage.fullpath)!}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                />
-              )}
+      <PageContainer className="pb-16 md:pb-20">
+        <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between gap-4">
+              <SectionHeading title="Items" description={`${items.length} item${items.length === 1 ? '' : 's'} in your basket`} />
+              <button
+                onClick={clearCart}
+                className="font-inter text-[12px] font-semibold uppercase tracking-[0.14em] text-[#8a3030] transition-opacity hover:opacity-70"
+              >
+                Clear all
+              </button>
             </div>
-            <div className="flex-grow flex flex-col justify-between">
-              <div>
-                <div className="flex justify-between items-start">
-                  <h2 className="text-xl font-bold text-bsava-navy leading-tight">{item.title}</h2>
-                  <button onClick={() => removeItem(item.id)} className="text-gray-400 hover:text-red-600 transition-colors">
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-                <p className="text-xs text-bsava-blue font-bold uppercase tracking-widest mt-1">
-                  {item.productType}
-                </p>
-              </div>
 
-              <div className="flex justify-between items-end mt-4">
-                <div className="flex items-center border border-gray-300 rounded-md">
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    className="px-3 py-1 hover:bg-gray-100 transition-colors"
-                  >
-                    -
-                  </button>
-                  <span className="px-4 py-1 border-x border-gray-300 min-w-[40px] text-center font-semibold">
-                    {item.quantity}
-                  </span>
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="px-3 py-1 hover:bg-gray-100 transition-colors"
-                  >
-                    +
-                  </button>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs text-gray-500 line-through">
-                    £{((item.nonMemberPrice || 0) * item.quantity).toFixed(2)} (Non-Member)
+            {items.map((item) => (
+              <SurfaceCard key={item.id} className="p-6">
+                <div className="flex flex-col gap-6 md:flex-row md:items-start">
+                  <div className="relative h-[180px] w-full shrink-0 overflow-hidden bg-[#eeeeee] md:h-[160px] md:w-[160px]">
+                    {item.mainImage?.fullpath ? (
+                      <Image
+                        src={getPimcoreImageUrl(item.mainImage.fullpath)!}
+                        alt={item.title}
+                        fill
+                        className="object-contain p-4"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-[18px] font-black uppercase tracking-[0.14em] text-black/20">
+                        BSAVA
+                      </div>
+                    )}
                   </div>
-                  <div className="text-xl font-bold text-bsava-blue">
-                    £{((item.memberPrice || 0) * item.quantity).toFixed(2)} (Member)
+
+                  <div className="flex flex-1 flex-col gap-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex flex-col gap-2">
+                        <span className="font-inter text-[12px] font-semibold uppercase tracking-[0.14em] text-[#6d6d6d]">
+                          {item.productType}
+                        </span>
+                        <h2 className="font-inter text-[24px] font-extrabold leading-[1.2] text-[#1d1c1d]">
+                          {item.title}
+                        </h2>
+                      </div>
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="font-inter text-[12px] font-semibold uppercase tracking-[0.14em] text-[#6d6d6d] transition-opacity hover:opacity-70"
+                      >
+                        Remove
+                      </button>
+                    </div>
+
+                    <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+                      <div className="inline-flex w-fit items-center border border-[#d9d9d9] bg-white">
+                        <button
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          className="px-4 py-3 font-inter text-[18px] leading-none text-[#1d1c1d] transition-colors hover:bg-black/5"
+                        >
+                          -
+                        </button>
+                        <span className="min-w-[56px] border-x border-[#d9d9d9] px-4 py-3 text-center font-inter text-[16px] font-semibold text-[#1d1c1d]">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          className="px-4 py-3 font-inter text-[18px] leading-none text-[#1d1c1d] transition-colors hover:bg-black/5"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className="grid gap-2 font-inter text-[14px] leading-[1.5] text-[#1d1c1d] md:text-right">
+                        <div>
+                          <span className="text-[#6d6d6d]">Non-members:</span>{" "}
+                          <span className="font-semibold">
+                            £{((item.nonMemberPrice || 0) * item.quantity).toFixed(2)}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-[#6d6d6d]">Members:</span>{" "}
+                          <span className="font-semibold">
+                            £{((item.memberPrice || 0) * item.quantity).toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </SurfaceCard>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="mt-12 bg-gray-50 p-8 rounded-lg">
-        <div className="flex justify-between items-center mb-6">
-          <span className="text-lg font-medium text-gray-600">Subtotal</span>
-          <span className="text-3xl font-bold text-bsava-navy">£{subtotal.toFixed(2)}</span>
+          <SurfaceCard className="p-8 xl:sticky xl:top-8">
+            <div className="flex flex-col gap-8">
+              <SectionHeading title="Summary" />
+              <div className="flex items-end justify-between gap-6 border-b border-[#e5e5e5] pb-6">
+                <span className="font-inter text-[16px] leading-[1.5] text-[#5d5d5d]">Subtotal</span>
+                <span className="font-bsava-display text-[34px] leading-[1] tracking-[-0.05em] text-[#1d1c1d]">
+                  £{subtotal.toFixed(2)}
+                </span>
+              </div>
+
+              <p className="font-inter text-[14px] leading-[1.55] text-[#5d5d5d]">
+                Taxes and shipping are calculated at checkout. Membership pricing is shown where available.
+              </p>
+
+              <button
+                onClick={handleCheckout}
+                disabled={isCheckingOut}
+                className="inline-flex w-full items-center justify-center gap-3 bg-[#1d1c1d] px-5 py-[18px] font-inter text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.14em] text-white transition-colors hover:bg-black disabled:opacity-50"
+              >
+                {isCheckingOut ? (
+                  <>
+                    <svg className="h-5 w-5 animate-spin text-white" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Processing
+                  </>
+                ) : (
+                  'Proceed to Checkout'
+                )}
+              </button>
+
+              <Link
+                href="/products"
+                className="inline-flex w-full items-center justify-center border border-[#d9d9d9] px-5 py-[18px] font-inter text-[12px] font-semibold uppercase leading-[1.5] tracking-[0.14em] text-[#1d1c1d] transition-colors hover:bg-black/5"
+              >
+                Continue Browsing
+              </Link>
+            </div>
+          </SurfaceCard>
         </div>
-        <p className="text-sm text-gray-500 mb-8 italic">
-          Taxes and shipping calculated at checkout. Membership discounts applied where applicable.
-        </p>
-        <button
-          onClick={handleCheckout}
-          disabled={isCheckingOut}
-          className="w-full bg-bsava-blue text-white py-4 rounded-md font-bold text-lg uppercase tracking-widest hover:bg-bsava-navy transition-all disabled:opacity-50 flex items-center justify-center gap-3"
-        >
-          {isCheckingOut ? (
-            <>
-              <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-              Processing...
-            </>
-          ) : (
-            'Proceed to Checkout'
-          )}
-        </button>
-      </div>
+      </PageContainer>
     </div>
   );
 }

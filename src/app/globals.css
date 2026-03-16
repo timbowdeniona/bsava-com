@@ -17,10 +17,72 @@
 body {
   background: #ffffff;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter-ui), var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 .font-bsava-display {
   font-family: var(--font-decimal-ultra), var(--font-geist-sans), Arial, Helvetica, sans-serif;
   font-weight: 800;
+}
+
+.content-rich {
+  color: #1d1c1d;
+  font-family: var(--font-inter-ui), var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.content-rich > * + * {
+  margin-top: 1rem;
+}
+
+.content-rich h2,
+.content-rich h3,
+.content-rich h4 {
+  font-family: var(--font-decimal-ultra), var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: #1d1c1d;
+  margin-top: 2rem;
+}
+
+.content-rich h2 {
+  font-size: 2rem;
+}
+
+.content-rich h3 {
+  font-size: 1.625rem;
+}
+
+.content-rich h4 {
+  font-size: 1.25rem;
+}
+
+.content-rich p,
+.content-rich li,
+.content-rich blockquote {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4d4d4d;
+}
+
+.content-rich ul,
+.content-rich ol {
+  padding-left: 1.25rem;
+}
+
+.content-rich li + li {
+  margin-top: 0.5rem;
+}
+
+.content-rich a {
+  color: #1d1c1d;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.content-rich strong {
+  color: #1d1c1d;
+  font-weight: 700;
 }
