@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getHeader } from '@/lib/contentful';
 import { Entry } from 'contentful';
 import { NavigationItemSkeleton } from '@/types/contentful';
+import CartIcon from './CartIcon';
 
 const FIGMA_HEADER_LOGO_URL = 'https://www.figma.com/api/mcp/asset/33066781-4dff-49a8-a699-1e1286635aa4';
 const FALLBACK_HEADER_TITLE = 'Internal Proof of Concept & Documentation';
@@ -33,7 +34,7 @@ export default async function Header() {
               <img
                 src={FIGMA_HEADER_LOGO_URL}
                 alt="BSAVA"
-                className="block h-[27.7px] w-auto"
+                className="block h-[27.7px] w-[111.8px] object-contain"
               />
             </Link>
             <span className="font-inter hidden min-w-0 text-[14px] font-semibold italic leading-none text-[#d5d5d5] md:block">
@@ -59,6 +60,7 @@ export default async function Header() {
             </div>
 
             <div className="flex items-center gap-4">
+              <CartIcon theme="inverted" />
               <button
                 type="button"
                 className="inline-flex h-[29px] items-center justify-center rounded-[2px] bg-bsava-blue px-5 text-[14px] leading-none text-white transition-colors hover:bg-bsava-light-blue"
@@ -69,6 +71,7 @@ export default async function Header() {
           </div>
 
           <div className="flex items-center gap-1 lg:hidden">
+            <CartIcon theme="inverted" />
             <button type="button" className="p-2 text-white" aria-label="Open navigation menu">
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
