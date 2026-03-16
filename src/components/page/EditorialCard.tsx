@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { SurfaceCard } from "./PagePrimitives";
 
@@ -13,8 +14,8 @@ export default function EditorialCard({
   ctaLabel = "Read article",
 }: {
   href: string;
-  title: string;
-  excerpt: string;
+  title: ReactNode;
+  excerpt: ReactNode;
   imageUrl?: string | null;
   imageAlt?: string;
   primaryMeta?: string | null;
@@ -22,14 +23,14 @@ export default function EditorialCard({
   ctaLabel?: string;
 }) {
   return (
-    <Link href={href} className="group flex h-full max-w-[300px] w-full justify-self-center">
+    <Link href={href} className="group block w-full max-w-[300px] justify-self-center">
       <SurfaceCard className="flex h-full w-full flex-col pb-[30px] transition-transform duration-200 group-hover:-translate-y-0.5">
         <div className="relative h-[214px] w-full overflow-hidden bg-black/5">
           {imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={imageUrl}
-              alt={imageAlt || title}
+              alt={imageAlt || "Article image"}
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
@@ -40,11 +41,11 @@ export default function EditorialCard({
         </div>
 
         <div className="flex flex-1 flex-col gap-[13px] px-[20px] pt-[24px]">
-          <h3 className="min-h-[72px] font-inter text-[16px] font-extrabold leading-[1.5] text-[#1d1c1d]">
+          <h3 className="min-h-[72px] line-clamp-3 font-inter text-[16px] font-extrabold leading-[1.5] text-[#1d1c1d] [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit">
             {title}
           </h3>
 
-          <p className="min-h-[84px] font-inter text-[14px] leading-[1.5] text-[#1d1c1d]">
+          <p className="min-h-[84px] line-clamp-4 font-inter text-[14px] leading-[1.5] text-[#1d1c1d] [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit">
             {excerpt}
           </p>
 

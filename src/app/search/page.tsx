@@ -1,6 +1,7 @@
 "use client";
 
 import { liteClient as algoliasearch } from "algoliasearch/lite";
+import Link from "next/link";
 import {
   Configure,
   Highlight,
@@ -10,9 +11,10 @@ import {
   RefinementList,
   SearchBox,
   useInstantSearch,
+  useSearchBox,
 } from "react-instantsearch";
 
-import NewsInsightCard from "@/components/page/NewsInsightCard";
+import EditorialCard from "@/components/page/EditorialCard";
 import { PageContainer, PageHero, SectionHeading, SurfaceCard } from "@/components/page/PagePrimitives";
 import { formatShortDate } from "@/lib/contentful-ui";
 import { getPimcoreImageUrl } from "@/lib/images";
@@ -51,62 +53,68 @@ type ProductHit = BaseHit & {
   mainImage?: { fullpath: string };
 };
 
+const archiveSearchGridClasses =
+  "[&_.ais-Hits-list]:grid [&_.ais-Hits-list]:justify-center [&_.ais-Hits-list]:gap-x-[30px] [&_.ais-Hits-list]:gap-y-[38px] [&_.ais-Hits-list]:md:grid-cols-2 [&_.ais-Hits-list]:xl:grid-cols-[repeat(4,300px)] [&_.ais-Hits-item]:flex [&_.ais-Hits-item]:list-none [&_.ais-Hits-item]:justify-center";
+
+const productSearchGridClasses =
+  "[&_.ais-Hits-list]:grid [&_.ais-Hits-list]:justify-center [&_.ais-Hits-list]:gap-x-[30px] [&_.ais-Hits-list]:gap-y-[38px] [&_.ais-Hits-list]:md:grid-cols-2 [&_.ais-Hits-list]:xl:grid-cols-[repeat(4,300px)] [&_.ais-Hits-item]:flex [&_.ais-Hits-item]:list-none [&_.ais-Hits-item]:justify-center";
+
 function ArticleCard({ hit }: { hit: ArticleHit }) {
   return (
-    <NewsInsightCard
+    <EditorialCard
       href={`/news/${hit.slug}`}
       title={<Highlight attribute="title" hit={hit as never} />}
       excerpt={hit.body ? <Highlight attribute="body" hit={hit as never} /> : "Read the full article for the latest BSAVA news and insights."}
       imageUrl={hit.coverImageUrl}
       imageAlt={hit.title}
-      dateText={formatShortDate(hit.publicationDate) ?? "Date TBC"}
-      titleClassName="line-clamp-2 [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit"
-      excerptClassName="line-clamp-3 [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit"
+      primaryMeta={hit.authorName || "BSAVA"}
+      secondaryMeta={formatShortDate(hit.publicationDate) ?? "Date TBC"}
     />
   );
 }
 
 function AuthorCard({ hit }: { hit: AuthorHit }) {
   const content = (
-    <SurfaceCard className="flex h-full w-full items-center gap-4 p-4 transition-transform duration-200 group-hover:-translate-y-0.5">
-      {hit.avatarUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={hit.avatarUrl}
-          alt={hit.title}
-          className="h-16 w-16 shrink-0 rounded-full object-cover"
-          loading="lazy"
-        />
-      ) : (
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#1d1c1d]/8 font-bsava-display text-[24px] leading-none tracking-[-0.05em] text-[#1d1c1d]">
-          {hit.title.charAt(0).toUpperCase()}
-        </div>
-      )}
+    <SurfaceCard className="flex h-full w-full max-w-[300px] flex-col pb-[30px] transition-transform duration-200 group-hover:-translate-y-0.5">
+      <div className="flex h-[214px] items-center justify-center overflow-hidden bg-[#f4f4f4]">
+        {hit.avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={hit.avatarUrl}
+            alt={hit.title}
+            className="h-[108px] w-[108px] rounded-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex h-[108px] w-[108px] items-center justify-center rounded-full bg-[#1d1c1d]/8 font-bsava-display text-[42px] leading-none tracking-[-0.05em] text-[#1d1c1d]">
+            {hit.title.charAt(0).toUpperCase()}
+          </div>
+        )}
+      </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <h3 className="font-inter text-[16px] font-extrabold leading-[1.45] text-[#1d1c1d]">
+      <div className="flex flex-1 flex-col gap-[13px] px-[20px] pt-[24px]">
+        <h3 className="min-h-[48px] line-clamp-2 font-inter text-[16px] font-extrabold leading-[1.5] text-[#1d1c1d] [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit">
           <Highlight attribute="title" hit={hit as never} />
         </h3>
-        {hit.bio ? (
-          <p className="line-clamp-2 font-inter text-[14px] leading-[1.5] text-[#555555]">
-            <Highlight attribute="bio" hit={hit as never} />
-          </p>
-        ) : null}
-        {hit.slug ? (
-          <span className="font-inter text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6d6d6d]">
-            View profile →
-          </span>
-        ) : null}
+
+        <p className="min-h-[84px] line-clamp-4 font-inter text-[14px] leading-[1.5] text-[#1d1c1d]/85 [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit">
+          {hit.bio ? <Highlight attribute="bio" hit={hit as never} /> : "Explore this author's profile and latest BSAVA content."}
+        </p>
+
+        <span className="mt-auto inline-flex items-center gap-[6px] font-inter text-[12px] font-semibold uppercase tracking-[0.14em] text-[#1d1c1d]">
+          View profile
+          <span aria-hidden="true">→</span>
+        </span>
       </div>
     </SurfaceCard>
   );
 
   return hit.slug ? (
-    <a href={`/authors/${hit.slug}`} className="group flex h-full">
+    <Link href={`/authors/${hit.slug}`} className="group block w-full max-w-[300px] justify-self-center">
       {content}
-    </a>
+    </Link>
   ) : (
-    <div className="group flex h-full">{content}</div>
+    <div className="group block w-full max-w-[300px] justify-self-center">{content}</div>
   );
 }
 
@@ -114,7 +122,7 @@ function ProductCard({ hit }: { hit: ProductHit }) {
   const imageUrl = getPimcoreImageUrl(hit.mainImage?.fullpath);
 
   return (
-    <div className="group flex h-full">
+    <div className="group block w-full max-w-[300px] justify-self-center">
       <SurfaceCard className="flex h-full w-full flex-col overflow-hidden pb-[24px] transition-transform duration-200 group-hover:-translate-y-0.5">
         <div className="relative h-[180px] overflow-hidden bg-[#eeeeee]">
           <span className="absolute bottom-0 left-0 rounded-tr-[4px] bg-white px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
@@ -202,8 +210,10 @@ const refinementPillStyles = [
 ].join(" ");
 
 function SearchContent() {
-  const { indexUiState } = useInstantSearch();
-  const hasQuery = !!indexUiState.query;
+  const { query } = useSearchBox();
+  const { results } = useInstantSearch();
+  const hasQuery = query.trim().length > 0 || !!results?.query?.trim();
+  const hasResults = !!results && results.nbHits > 0;
 
   return (
     <>
@@ -251,7 +261,7 @@ function SearchContent() {
         <Index indexId="articles-section" indexName={indexName}>
           <Configure filters="type:article" hitsPerPage={4} />
           <SectionWithHits title="Articles">
-            <div className="grid justify-center gap-8 md:grid-cols-[repeat(2,minmax(0,408px))] md:gap-x-[34px] md:gap-y-8 [&_.ais-Hits-list]:contents [&_.ais-Hits-item]:contents">
+            <div className={archiveSearchGridClasses}>
               <Hits hitComponent={ArticleCard as never} />
             </div>
           </SectionWithHits>
@@ -260,7 +270,7 @@ function SearchContent() {
         <Index indexId="authors-section" indexName={indexName}>
           <Configure filters="type:author" hitsPerPage={4} />
           <SectionWithHits title="Authors">
-            <div className="grid gap-4 md:grid-cols-2 [&_.ais-Hits-list]:contents [&_.ais-Hits-item]:contents">
+            <div className={archiveSearchGridClasses}>
               <Hits hitComponent={AuthorCard as never} />
             </div>
           </SectionWithHits>
@@ -271,7 +281,7 @@ function SearchContent() {
           <ProductSection />
         </Index>
 
-        {!hasQuery ? (
+        {!hasQuery && !hasResults ? (
           <SurfaceCard className="px-8 py-12 text-center">
             <div className="mx-auto flex max-w-[520px] flex-col items-center gap-4">
               <h2 className="font-bsava-display text-[28px] leading-[1.05] tracking-[-0.05em] text-[#1d1c1d]">
@@ -317,7 +327,7 @@ function ProductSection() {
         <RefinementList attribute="productType" />
       </div>
 
-      <div className="[&_.ais-Hits-list]:grid [&_.ais-Hits-list]:gap-4 [&_.ais-Hits-list]:md:grid-cols-2 [&_.ais-Hits-list]:xl:grid-cols-4 [&_.ais-Hits-item]:h-full">
+      <div className={productSearchGridClasses}>
         <Hits hitComponent={ProductCard as never} />
       </div>
     </ResultSection>
