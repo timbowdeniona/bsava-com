@@ -1,7 +1,6 @@
 "use client";
 
 import { liteClient as algoliasearch } from "algoliasearch/lite";
-import Link from "next/link";
 import {
   Configure,
   Highlight,
@@ -13,9 +12,10 @@ import {
   useInstantSearch,
 } from "react-instantsearch";
 
+import NewsInsightCard from "@/components/page/NewsInsightCard";
 import { PageContainer, PageHero, SectionHeading, SurfaceCard } from "@/components/page/PagePrimitives";
+import { formatShortDate } from "@/lib/contentful-ui";
 import { getPimcoreImageUrl } from "@/lib/images";
-import { formatLongDate } from "@/lib/contentful-ui";
 
 const searchClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -53,64 +53,16 @@ type ProductHit = BaseHit & {
 
 function ArticleCard({ hit }: { hit: ArticleHit }) {
   return (
-    <Link href={`/news/${hit.slug}`} className="group flex h-full w-full max-w-[300px] justify-self-center">
-      <article className="flex h-full w-full flex-col gap-[30px] overflow-hidden rounded-[2px] bg-white pb-[30px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.15)] transition-transform duration-200 group-hover:-translate-y-0.5">
-        <div className="relative h-[300px] overflow-hidden bg-[#eeeeee]">
-          <span className="absolute bottom-0 left-0 z-20 rounded-tr-[4px] bg-white px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
-            Article
-          </span>
-          {hit.coverImageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={hit.coverImageUrl}
-              alt={hit.title}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-              loading="lazy"
-            />
-          ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[radial-gradient(circle_at_20%_25%,rgba(255,255,255,0.38),transparent_42%),linear-gradient(135deg,rgba(0,0,0,0.05),transparent_56%),linear-gradient(135deg,#efebe4_0%,#e6dfd4_100%)] px-8 text-center">
-              <span className="font-bsava-display text-[54px] leading-[0.9] tracking-[-0.07em] text-[#1d1c1d]">
-                BSAVA
-              </span>
-              <span className="mt-4 font-inter text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1d1c1d]/55">
-                Article
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-1 flex-col gap-[13px] px-[20px]">
-          <h3 className="min-h-[72px] line-clamp-3 font-inter text-[16px] font-extrabold leading-[1.5] text-[#1d1c1d] [&_mark]:bg-[#f3ee7b] [&_mark]:px-[1px] [&_mark]:text-inherit">
-            <Highlight attribute="title" hit={hit as never} />
-          </h3>
-
-          {hit.body ? (
-            <p className="min-h-[84px] line-clamp-4 font-inter text-[14px] leading-[1.5] text-[#1d1c1d] [&_mark]:bg-[#f3ee7b] [&_mark]:px-[1px] [&_mark]:text-inherit">
-              <Highlight attribute="body" hit={hit as never} />
-            </p>
-          ) : null}
-
-          <div className="flex flex-col gap-[5px]">
-            <div className="flex min-h-[52px] flex-col items-start gap-[2px] border-y border-[#e5e5e5] py-[5px]">
-              <div className="font-inter text-[14px] leading-[1.5] text-[#1d1c1d]">
-                {hit.authorName || "BSAVA"}
-              </div>
-              <div className="font-inter text-[14px] font-semibold leading-[1.5] text-[#1d1c1d]">
-                {hit.publicationDate ? formatLongDate(hit.publicationDate) : "Publication date TBC"}
-              </div>
-            </div>
-
-            <div className="min-h-[21px] font-inter text-[14px] leading-[1.5] text-[#747474]">
-              News & Insights
-            </div>
-          </div>
-
-          <span className="mt-auto inline-flex w-fit items-center justify-center bg-[#1d1c1d] px-[20px] py-[15px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-white transition-colors hover:bg-black">
-            Read article
-          </span>
-        </div>
-      </article>
-    </Link>
+    <NewsInsightCard
+      href={`/news/${hit.slug}`}
+      title={<Highlight attribute="title" hit={hit as never} />}
+      excerpt={hit.body ? <Highlight attribute="body" hit={hit as never} /> : "Read the full article for the latest BSAVA news and insights."}
+      imageUrl={hit.coverImageUrl}
+      imageAlt={hit.title}
+      dateText={formatShortDate(hit.publicationDate) ?? "Date TBC"}
+      titleClassName="line-clamp-2 [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit"
+      excerptClassName="line-clamp-3 [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit"
+    />
   );
 }
 
@@ -299,7 +251,7 @@ function SearchContent() {
         <Index indexId="articles-section" indexName={indexName}>
           <Configure filters="type:article" hitsPerPage={4} />
           <SectionWithHits title="Articles">
-            <div className="grid justify-center gap-x-[30px] gap-y-[38px] md:grid-cols-[repeat(2,300px)] [&_.ais-Hits-list]:contents [&_.ais-Hits-item]:contents">
+            <div className="grid justify-center gap-8 md:grid-cols-[repeat(2,minmax(0,408px))] md:gap-x-[34px] md:gap-y-8 [&_.ais-Hits-list]:contents [&_.ais-Hits-item]:contents">
               <Hits hitComponent={ArticleCard as never} />
             </div>
           </SectionWithHits>
