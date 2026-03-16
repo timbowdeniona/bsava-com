@@ -113,7 +113,7 @@ export default async function FeaturedResources() {
   const products = await getProducts(3).catch(() => []);
 
   return (
-    <section className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 overflow-hidden bg-[#8232a7]">
+    <section className="relative overflow-hidden bg-[#8232a7]">
       <div className="mx-auto flex max-w-[1372px] flex-col gap-8 px-6 py-10 md:px-10 md:py-12 lg:gap-[38px] lg:px-10 lg:py-[40px]">
         <div className="flex items-center gap-[14px] md:gap-5">
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -11,7 +11,7 @@ export default async function NewsSummary() {
   const articles = await getLatestArticles(3).catch(() => []);
 
   return (
-    <div className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 overflow-hidden bg-[#ffd200]">
+    <div className="relative overflow-hidden bg-[#ffd200]">
       <div className="mx-auto flex max-w-[1372px] flex-col gap-8 px-6 py-10 md:px-10 md:py-12 lg:gap-[38px] lg:px-10 lg:py-10">
         <div className="flex items-center gap-[14px] md:gap-5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
