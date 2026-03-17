@@ -1,7 +1,18 @@
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
+import type { Document } from "@contentful/rich-text-types";
 import type { Entry } from "contentful";
 
 import type { ArticleSkeleton } from "@/types/contentful";
+
+function isRichTextDocument(value: unknown): value is Document {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      "nodeType" in value &&
+      "content" in value &&
+      "data" in value
+  );
+}
 
 export function getContentfulAssetUrl(asset: unknown) {
   if (
@@ -53,7 +64,13 @@ export function getArticleExcerpt(
   maxLength = 145,
   fallback = "Read the full article for the latest BSAVA news and insights."
 ) {
-  const plainText = documentToPlainTextString(article.fields.body).replace(/\s+/g, " ").trim();
+  const body = article.fields.body;
+
+  if (!isRichTextDocument(body)) {
+    return fallback;
+  }
+
+  const plainText = documentToPlainTextString(body).replace(/\s+/g, " ").trim();
 
   if (!plainText) {
     return fallback;

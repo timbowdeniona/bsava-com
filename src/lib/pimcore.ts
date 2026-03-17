@@ -2,6 +2,7 @@ import { env } from './env';
 import type { PimcoreProduct, PimcoreGraphQLResponse } from '@/types/pimcore';
 
 type PimcoreImage = { fullpath: string } | null;
+const PIMCORE_REQUEST_TIMEOUT_MS = 10_000;
 
 interface ListingEdge<TNode> {
   node: TNode;
@@ -87,6 +88,10 @@ interface PimcoreProductNode {
   annualFee?: number;
 }
 
+const normalizePimcoreImage = (
+  image?: PimcoreImage
+): PimcoreProduct['mainImage'] => image ?? undefined;
+
 export interface PimcoreRequestOptions {
   headers?: Record<string, string>;
   method?: string;
@@ -104,6 +109,7 @@ export const pimcoreFetch = async <T>(path: string, options: PimcoreRequestOptio
       ...options.headers,
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
+    signal: AbortSignal.timeout(PIMCORE_REQUEST_TIMEOUT_MS),
     next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 } // Default cache 1 hour, disable in dev
   });
 
@@ -127,6 +133,7 @@ export const pimcoreGraphQL = async <T>(query: string, variables: Record<string,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ query, variables }),
+    signal: AbortSignal.timeout(PIMCORE_REQUEST_TIMEOUT_MS),
     next: { revalidate: process.env.NODE_ENV === 'development' ? 0 : 3600 } 
   });
 
@@ -273,11 +280,19 @@ export const getProducts = async (limit: number = 20): Promise<PimcoreProduct[]>
         }
       }
     `;
-    const data = await pimcoreGraphQL<LegacyProductsData>(legacyQuery, { first: limit });
-    return data.getProductListing?.edges.map((e) => ({
-      ...e.node,
-      basePrice: e.node.memberPrice
-    })) || [];
+    try {
+      const data = await pimcoreGraphQL<LegacyProductsData>(legacyQuery, { first: limit });
+      return (
+        data.getProductListing?.edges.map(({ node }) => ({
+          ...node,
+          mainImage: normalizePimcoreImage(node.mainImage),
+          basePrice: node.memberPrice,
+        })) ?? []
+      );
+    } catch (legacyErr) {
+      console.warn('Legacy getProductListing failed, returning empty product list', legacyErr);
+      return [];
+    }
   }
 };
 
@@ -298,15 +313,23 @@ export const getPimcoreProduct = async (id: string | number): Promise<PimcorePro
   `;
   const data = await pimcoreGraphQL<{ getProduct: PimcoreProductNode }>(query, { id });
   const p = data.getProduct;
+  const title = p.title ?? p.name;
+
+  if (!title) {
+    throw new Error(`Pimcore product ${id} is missing a title`);
+  }
+
   return {
     id: p.id,
     productType: 'Book', // Placeholder
-    title: p.title || p.name,
-    sku: p.sku || p.isbn,
+    title,
+    sku: p.sku ?? p.isbn ?? undefined,
     description: p.description,
-    mainImage: p.coverImage || p.eventImage || p.courseImage || p.membershipImage,
-    memberPrice: p.memberPrice || p.annualFee,
-    nonMemberPrice: p.nonMemberPrice || p.annualFee,
-    basePrice: p.memberPrice || p.annualFee
+    mainImage: normalizePimcoreImage(
+      p.coverImage ?? p.eventImage ?? p.courseImage ?? p.membershipImage
+    ),
+    memberPrice: p.memberPrice ?? p.annualFee ?? undefined,
+    nonMemberPrice: p.nonMemberPrice ?? p.annualFee ?? undefined,
+    basePrice: p.memberPrice ?? p.annualFee ?? undefined,
   };
 };

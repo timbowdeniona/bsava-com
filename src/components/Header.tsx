@@ -1,11 +1,15 @@
 import Link from 'next/link';
 import { getHeader } from '@/lib/contentful';
-import { Entry } from 'contentful';
+import type { Entry } from 'contentful';
 import { NavigationItemSkeleton } from '@/types/contentful';
 import CartIcon from './CartIcon';
 
 const FIGMA_HEADER_LOGO_URL = 'https://www.figma.com/api/mcp/asset/33066781-4dff-49a8-a699-1e1286635aa4';
 const FALLBACK_HEADER_TITLE = 'Internal Proof of Concept & Documentation';
+
+function isResolvedNavigationItem(item: unknown): item is Entry<NavigationItemSkeleton> {
+  return Boolean(item && typeof item === 'object' && 'fields' in item && 'sys' in item);
+}
 
 export default async function Header() {
   const header = await getHeader();
@@ -16,9 +20,8 @@ export default async function Header() {
   const rawSiteTitle = header.fields.title as string | undefined;
   const siteTitle =
     rawSiteTitle && rawSiteTitle !== 'Main Header' ? rawSiteTitle : FALLBACK_HEADER_TITLE;
-  const resolvedNavigationItems = (navigationItems ?? []).filter(
-    (item): item is Entry<NavigationItemSkeleton> => Boolean(item && 'fields' in item),
-  );
+  const navigationCandidates = Array.isArray(navigationItems) ? navigationItems : [];
+  const resolvedNavigationItems = navigationCandidates.filter(isResolvedNavigationItem);
   const navigationLabelOverrides: Record<string, string> = {
     '/products': 'Resources',
   };
