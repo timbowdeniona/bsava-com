@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/pimcore-app/node_modules
 /.pnp
 .pnp.*
 .yarn/*

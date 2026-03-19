@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  functions = "server"
+  publish = "build"
+
+[[redirects]]
+  from = "/pimcore/*"
+  to = "/.netlify/functions/index"
+  status = 200
+
+[[redirects]]
+  from = "/image-proxy/*"
+  to = "/.netlify/functions/index"
+  status = 200

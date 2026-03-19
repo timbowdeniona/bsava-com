@@ -11,7 +11,9 @@ This extension allows editors to browse, search, and link live product data from
 1.  **Pimcore Data Hub**: Ensure the GraphQL API is enabled and you have an API Key.
 2.  **Environment Variables**: Create a `.env` file in `pimcore-app/`:
     ```bash
-    PIMCORE_BACKEND_URL=https://your-pimcore-admin.com
+    # The base URL of your Pimcore instance (e.g., https://pimcore.example.com)
+    # Do NOT include /admin in this URL.
+    PIMCORE_BACKEND_URL=https://your-pimcore-domain.com
     PIMCORE_API_KEY=your_pimcore_api_key
     REACT_APP_PIMCORE_PROXY_URL=http://localhost:3001/pimcore
     ```

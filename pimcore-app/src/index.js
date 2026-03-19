@@ -1,12 +1,13 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { init, locations } from '@contentful/app-sdk';
 import { GlobalStyles } from '@contentful/f36-components';
 import { Sidebar } from './locations/Sidebar';
 import { Field } from './locations/Field';
 
 init((sdk) => {
-  const root = document.getElementById('root');
+  const container = document.getElementById('root');
+  const root = createRoot(container);
 
   const ComponentLocationSettings = [
     {
@@ -25,12 +26,11 @@ init((sdk) => {
 
   ComponentLocationSettings.forEach((at) => {
     if (sdk.location.is(at.location)) {
-      render(
+      root.render(
         <React.Fragment>
           <GlobalStyles />
           {at.component}
-        </React.Fragment>,
-        root
+        </React.Fragment>
       );
     }
   });

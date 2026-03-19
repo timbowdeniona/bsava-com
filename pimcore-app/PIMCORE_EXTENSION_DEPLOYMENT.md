@@ -7,7 +7,7 @@ The Node.js middleware (`server/index.js`) must be hosted on a platform that sup
 
 1.  Set up your hosting environment.
 2.  Configure environment variables on the host:
-    -   `PIMCORE_BACKEND_URL`
+    -   `PIMCORE_BACKEND_URL` (Base domain, e.g., `https://pimcore.example.com`)
     -   `PIMCORE_API_KEY`
     -   `PORT` (usually 3001)
 3.  Deploy the code in `pimcore-app/`.
