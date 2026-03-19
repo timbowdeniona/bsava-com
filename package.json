@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build:picker": "cd pimcore-app && npm install && npm run build && mkdir -p ../public/pimcore-picker && cp -r build/* ../public/pimcore-picker",
+    "build": "next build && npm run build:picker",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
   },
   "dependencies": {
     "@contentful/rich-text-plain-text-renderer": "^17.1.6",
