@@ -4,16 +4,21 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build:picker": "cd pimcore-app && npm install && npm run build && mkdir -p ../public/pimcore-picker && cp -r build/* ../public/pimcore-picker",
-    "build": "next build && npm run build:picker",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@contentful/app-sdk": "^4.53.1",
+    "@contentful/f36-components": "^6.7.1",
+    "@contentful/f36-icons": "^6.7.1",
+    "@contentful/f36-tokens": "^6.1.2",
+    "@contentful/f36-utils": "^6.1.0",
     "@contentful/rich-text-plain-text-renderer": "^17.1.6",
     "@contentful/rich-text-react-renderer": "^16.1.6",
     "@stripe/stripe-js": "^8.9.0",
     "algoliasearch": "^5.49.1",
+    "axios": "^1.13.6",
     "contentful": "^11.10.5",
     "mermaid": "^11.12.3",
     "next": "16.1.6",
