@@ -1,12 +1,16 @@
+"use client";
+
 import React from 'react';
 import { PimcoreProduct } from '@/types/pimcore';
 import { PriceBadge } from './PriceBadge';
+import { useCart } from '@/lib/store/useCart';
 
 interface CourseCardProps {
   product: PimcoreProduct;
 }
 
 export function CourseCard({ product }: CourseCardProps) {
+  const addItem = useCart((state) => state.addItem);
   return (
     <div className="bg-white border boundary-gray shadow-sm hover:shadow-xl hover:border-bsava-blue transition-all duration-300 group flex flex-col h-full overflow-hidden">
       {/* Visual Header for Courses */}
@@ -43,8 +47,11 @@ export function CourseCard({ product }: CourseCardProps) {
           </p>
         </div>
 
-        <button className="w-full py-3 border-2 border-bsava-navy text-bsava-navy font-bold uppercase text-[10px] tracking-widest hover:bg-bsava-navy hover:text-white transition-all mt-auto">
-          View Syllabus &rarr;
+        <button 
+          onClick={() => addItem(product)}
+          className="w-full py-3 border-2 border-bsava-navy text-bsava-navy font-bold uppercase text-[10px] tracking-widest hover:bg-bsava-navy hover:text-white transition-all mt-auto"
+        >
+          Add to Basket &rarr;
         </button>
       </div>
     </div>

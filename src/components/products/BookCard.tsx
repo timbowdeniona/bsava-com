@@ -1,16 +1,19 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import { PimcoreProduct } from '@/types/pimcore';
 import { PriceBadge } from './PriceBadge';
+import { useCart } from '@/lib/store/useCart';
+import { getPimcoreImageUrl } from '@/lib/images';
 
 interface BookCardProps {
   product: PimcoreProduct;
 }
 
 export function BookCard({ product }: BookCardProps) {
-  const imageUrl = product.mainImage?.fullpath 
-    ? `${process.env.NEXT_PUBLIC_PIMCORE_BASE_URL || 'http://35.246.89.127'}${product.mainImage.fullpath}`
-    : null;
+  const addItem = useCart((state) => state.addItem);
+  const imageUrl = getPimcoreImageUrl(product.mainImage?.fullpath);
 
   return (
     <div className="bg-white border boundary-gray shadow-sm hover:shadow-xl hover:border-bsava-blue transition-all duration-300 group flex flex-col h-full">
@@ -55,7 +58,10 @@ export function BookCard({ product }: BookCardProps) {
           {product.description || "Comprehensive veterinary resource from BSAVA."}
         </p>
 
-        <button className="w-full py-3 bg-bsava-navy text-white font-bold uppercase text-[10px] tracking-widest hover:bg-bsava-blue transition-colors mt-auto">
+        <button 
+          onClick={() => addItem(product)}
+          className="w-full py-3 bg-bsava-navy text-white font-bold uppercase text-[10px] tracking-widest hover:bg-bsava-blue transition-colors mt-auto"
+        >
           Order Copy &rarr;
         </button>
       </div>

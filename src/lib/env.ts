@@ -9,6 +9,7 @@ const envSchema = z.object({
 
   // PIMcore
   PIMCORE_BASE_URL: z.string().url(),
+  NEXT_PUBLIC_PIMCORE_BASE_URL: z.string().url().optional(),
   PIMCORE_REST_API_TOKEN: z.string().min(1),
   PIMCORE_PRODUCTS_ROOT_PATH: z.string().optional().default('/BSAVA'),
 
@@ -24,6 +25,7 @@ export const env = envSchema.parse({
   CONTENTFUL_PREVIEW_TOKEN: process.env.CONTENTFUL_PREVIEW_TOKEN,
   CONTENTFUL_MANAGEMENT_TOKEN: process.env.CONTENTFUL_MANAGEMENT_TOKEN,
   PIMCORE_BASE_URL: process.env.PIMCORE_BASE_URL,
+  NEXT_PUBLIC_PIMCORE_BASE_URL: process.env.NEXT_PUBLIC_PIMCORE_BASE_URL,
   PIMCORE_REST_API_TOKEN: process.env.PIMCORE_REST_API_TOKEN,
   NEXT_PUBLIC_ALGOLIA_APP_ID: process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
   NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY: process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_API_KEY,
