@@ -1,8 +1,8 @@
 import { getProducts } from '@/lib/pimcore';
 import { ProductCard } from '@/components/products/ProductCard';
-import ProductsHero from './components/ProductsHero';
-import ProductsMembershipPromoCard from './components/ProductsMembershipPromoCard';
-import ProductsRoverPromoCard from './components/ProductsRoverPromoCard';
+import ProductsHero from '@/app/products/components/ProductsHero';
+import ProductsMembershipPromoCard from '@/app/products/components/ProductsMembershipPromoCard';
+import ProductsRoverPromoCard from '@/app/products/components/ProductsRoverPromoCard';
 
 export default async function ProductsPage() {
   const products = await getProducts(24).catch(() => []);
