@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { contentfulClient } from '@/lib/contentful';
-import { MembershipSkeleton, TestimonialSkeleton } from '@/types/contentful';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import type { Entry } from 'contentful';
 import Link from 'next/link';
+
+import { PageContainer, PageHero, SectionHeading, SurfaceCard } from '@/components/page/PagePrimitives';
+import { contentfulClient } from '@/lib/contentful';
+import { MembershipSkeleton, TestimonialSkeleton } from '@/types/contentful';
 
 export default async function MembershipBenefitsPage() {
   const membershipResponse = await contentfulClient.getEntries<MembershipSkeleton>({
@@ -20,120 +22,137 @@ export default async function MembershipBenefitsPage() {
   const testimonials = testimonialResponse.items;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Hero Section */}
-      <section className="bg-blue-900 text-white py-20 px-4 md:px-8 lg:px-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">BSAVA Membership</h1>
-        <p className="text-lg md:text-xl max-w-3xl mx-auto opacity-90">
-          Join the Veterinary Community. Access exclusive benefits and resources. Enhance your career in small animal veterinary practice.
-        </p>
-      </section>
+    <div className="min-h-screen bg-white">
+      <PageHero
+        title="BSAVA Membership"
+        description="Join a thriving veterinary community and access benefits, resources, and support tailored to every stage of small animal practice."
+      />
 
-      {/* Comparisons Section */}
-      <section className="py-16 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Membership Options</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Supporting you at every stage of your career whether you are studying, a recent graduate or advanced in your career, there is a membership option just for you!
-          </p>
-        </div>
+      <PageContainer className="flex flex-col gap-14 pb-16 md:gap-16 md:pb-20">
+        <section className="flex flex-col gap-8">
+          <SectionHeading
+            title="Membership Options"
+            description="Whether you are studying, recently graduated, or well established in practice, there is a BSAVA membership option to support your next step."
+          />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
           {memberships.map((membership: Entry<MembershipSkeleton, "WITHOUT_LINK_RESOLUTION", string>) => (
-            <div 
+            <SurfaceCard
               key={membership.sys.id} 
-              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 flex flex-col relative overflow-hidden transition-transform hover:-translate-y-1"
+              className="flex h-full flex-col p-8"
             >
               {membership.fields.type === 'vet' && (
-                <div className="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                <div className="mb-5 inline-flex w-fit items-center justify-center bg-[#1d1c1d] px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-white">
                   Most Popular
                 </div>
               )}
               
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{membership.fields.title}</h3>
-                <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-4xl font-extrabold text-blue-900">{membership.fields.price}</span>
+              <div className="mb-6 flex flex-col gap-3">
+                <h3 className="font-inter text-[24px] font-extrabold leading-[1.2] text-[#1d1c1d]">
+                  {membership.fields.title}
+                </h3>
+                <div className="flex items-end gap-2">
+                  <span className="font-bsava-display text-[34px] leading-[1] tracking-[-0.05em] text-[#1d1c1d]">
+                    {membership.fields.price}
+                  </span>
                 </div>
                 {membership.fields.priceDescription && (
-                  <p className="text-sm text-gray-500 font-medium">{membership.fields.priceDescription}</p>
+                  <p className="font-inter text-[14px] leading-[1.5] text-[#5d5d5d]">
+                    {membership.fields.priceDescription}
+                  </p>
                 )}
               </div>
 
               <div className="flex-grow">
-                <h4 className="font-semibold text-gray-900 mb-4 uppercase tracking-wider text-sm">Key Benefits</h4>
+                <h4 className="mb-4 font-inter text-[12px] font-semibold uppercase tracking-[0.16em] text-[#6d6d6d]">
+                  Key Benefits
+                </h4>
                 {membership.fields.benefits && membership.fields.benefits.length > 0 && (
-                  <ul className="space-y-3 mb-8">
+                  <ul className="mb-8 space-y-3">
                     {membership.fields.benefits.map((benefit: string, index: number) => (
-                      <li key={index} className="flex gap-3 text-gray-700">
-                        <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                      <li key={index} className="flex gap-3 font-inter text-[15px] leading-[1.55] text-[#1d1c1d]">
+                        <span className="mt-[3px] flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#1d1c1d] text-[11px] text-white">
+                          ✓
+                        </span>
                         <span>{benefit}</span>
                       </li>
                     ))}
                   </ul>
                 )}
+
+                {membership.fields.detailedBenefits ? (
+                  <div className="content-rich border-t border-[#e5e5e5] pt-6">
+                    {documentToReactComponents(membership.fields.detailedBenefits as any)}
+                  </div>
+                ) : null}
               </div>
 
               {membership.fields.ctaLink && (
                 <Link
                   href={membership.fields.ctaLink}
-                  className="mt-6 w-full py-4 text-center rounded-xl font-bold text-white transition-colors focus:ring-4 focus:outline-none focus:ring-blue-300 bg-blue-600 hover:bg-blue-700 block"
+                  className="mt-8 inline-flex w-full items-center justify-center bg-[#1d1c1d] px-5 py-[15px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-white transition-colors hover:bg-black"
                 >
                   {membership.fields.ctaText || 'Join Now'}
                 </Link>
               )}
-            </div>
+            </SurfaceCard>
           ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* Testimonials Section */}
-      {testimonials.length > 0 && (
-        <section className="bg-white py-16 px-4 md:px-8 lg:px-16 border-t border-gray-200">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">What Our Members Say</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {testimonials.length > 0 ? (
+          <section className="flex flex-col gap-8">
+            <SectionHeading
+              title="What Our Members Say"
+              description="Feedback from members using BSAVA resources and membership benefits in practice."
+            />
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
               {testimonials.map((testimonial: Entry<TestimonialSkeleton, "WITHOUT_LINK_RESOLUTION", string>) => (
-                <div key={testimonial.sys.id} className="bg-gray-50 rounded-2xl p-8 border border-gray-100 shadow-sm relative">
-                  <div className="absolute top-6 left-6 text-blue-200 opacity-50">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <SurfaceCard key={testimonial.sys.id} className="relative h-full p-8">
+                  <div className="absolute left-6 top-6 text-[#1d1c1d]/8">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M14.017 21L16.411 14.593H10V3H24V14.593L20.409 21H14.017ZM0 21L2.394 14.593H-4.938V3H10V14.593L6.392 21H0Z" />
                     </svg>
                   </div>
-                  <div className="relative z-10">
-                    <div className="prose prose-blue text-gray-700 text-lg italic mb-6">
+                  <div className="relative z-10 flex h-full flex-col">
+                    <div className="content-rich mb-6 flex-1 font-inter text-[16px] italic leading-[1.7] text-[#1d1c1d]">
                       {testimonial.fields.body && documentToReactComponents(testimonial.fields.body as any)}
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl uppercase">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#1d1c1d]/8 font-inter text-[18px] font-semibold uppercase text-[#1d1c1d]">
                         {testimonial.fields.author?.charAt(0) || 'M'}
                       </div>
                       <div>
-                        <h4 className="font-bold text-gray-900">{testimonial.fields.author}</h4>
-                        <p className="text-sm text-gray-500 font-medium">{testimonial.fields.authorPosition}</p>
+                        <h4 className="font-inter text-[16px] font-extrabold leading-[1.4] text-[#1d1c1d]">
+                          {testimonial.fields.author}
+                        </h4>
+                        <p className="font-inter text-[14px] leading-[1.5] text-[#5d5d5d]">
+                          {testimonial.fields.authorPosition}
+                        </p>
                       </div>
                     </div>
                   </div>
-                </div>
+                </SurfaceCard>
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          </section>
+        ) : null}
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 md:px-8 text-center bg-blue-50">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to start exploring?</h2>
-        <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-          Join the BSAVA today and start taking advantage of our comprehensive collection of resources.
-        </p>
-        <Link 
-          href="https://bsavaportal.bsava.com/s/membership-selection" 
-          className="inline-block bg-blue-600 text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
-        >
-          Explore Membership Categories
-        </Link>
-      </section>
+        <SurfaceCard className="px-8 py-12 md:px-12 md:py-14">
+          <div className="mx-auto flex max-w-[760px] flex-col items-center gap-5 text-center">
+            <SectionHeading
+              title="Ready to start exploring?"
+              description="Join BSAVA today and begin making the most of our membership benefits and clinical resources."
+            />
+            <Link 
+              href="https://bsavaportal.bsava.com/s/membership-selection" 
+              className="inline-flex items-center justify-center bg-[#1d1c1d] px-5 py-[15px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-white transition-colors hover:bg-black"
+            >
+              Explore Membership Categories
+            </Link>
+          </div>
+        </SurfaceCard>
+      </PageContainer>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -10,6 +11,16 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter-ui",
+  subsets: ["latin"],
+});
+
+const decimalUltra = localFont({
+  src: "../../public/fonts/Decimal-Ultra.otf",
+  variable: "--font-decimal-ultra",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${decimalUltra.variable} antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning
       >
         {children}

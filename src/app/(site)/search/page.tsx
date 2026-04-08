@@ -1,18 +1,23 @@
 "use client";
 
-import { liteClient as algoliasearch } from 'algoliasearch/lite';
+import { liteClient as algoliasearch } from "algoliasearch/lite";
+import Link from "next/link";
 import {
-  InstantSearch,
-  SearchBox,
-  Hits,
-  useHits,
-  RefinementList,
   Configure,
-  Index,
   Highlight,
+  Hits,
+  Index,
+  InstantSearch,
+  RefinementList,
+  SearchBox,
   useInstantSearch,
-} from 'react-instantsearch';
-import { getPimcoreImageUrl } from '@/lib/images';
+  useSearchBox,
+} from "react-instantsearch";
+
+import EditorialCard from "@/components/page/EditorialCard";
+import { PageContainer, PageHero, SectionHeading, SurfaceCard } from "@/components/page/PagePrimitives";
+import { formatShortDate } from "@/lib/contentful-ui";
+import { getPimcoreImageUrl } from "@/lib/images";
 
 const searchClient = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -20,8 +25,6 @@ const searchClient = algoliasearch(
 );
 
 const indexName = process.env.NEXT_PUBLIC_ALGOLIA_MAIN_INDEX as string;
-
-// ── Types ─────────────────────────────────────────────────────────────────────
 
 type BaseHit = { objectID: string; type: string };
 
@@ -50,126 +53,126 @@ type ProductHit = BaseHit & {
   mainImage?: { fullpath: string };
 };
 
-// ── Card components ───────────────────────────────────────────────────────────
+const archiveSearchGridClasses =
+  "[&_.ais-Hits-list]:grid [&_.ais-Hits-list]:justify-center [&_.ais-Hits-list]:gap-x-[30px] [&_.ais-Hits-list]:gap-y-[38px] [&_.ais-Hits-list]:md:grid-cols-2 [&_.ais-Hits-list]:xl:grid-cols-[repeat(4,300px)] [&_.ais-Hits-item]:flex [&_.ais-Hits-item]:list-none [&_.ais-Hits-item]:justify-center";
+
+const productSearchGridClasses =
+  "[&_.ais-Hits-list]:grid [&_.ais-Hits-list]:justify-center [&_.ais-Hits-list]:gap-x-[30px] [&_.ais-Hits-list]:gap-y-[38px] [&_.ais-Hits-list]:md:grid-cols-2 [&_.ais-Hits-list]:xl:grid-cols-[repeat(4,300px)] [&_.ais-Hits-item]:flex [&_.ais-Hits-item]:list-none [&_.ais-Hits-item]:justify-center";
 
 function ArticleCard({ hit }: { hit: ArticleHit }) {
-  const date = hit.publicationDate
-    ? new Date(hit.publicationDate).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' })
-    : null;
-
   return (
-    <a href={`/news/${hit.slug}`} className="group flex gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:border-indigo-200 hover:shadow-md transition-all duration-200">
-      {/* Thumbnail */}
-      <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gradient-to-br from-indigo-50 to-violet-100 flex items-center justify-center">
-        {hit.coverImageUrl ? (
-          <img src={hit.coverImageUrl} alt={hit.title} className="w-full h-full object-cover" loading="lazy" />
-        ) : (
-          <svg className="w-8 h-8 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-          </svg>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          {date && <span className="text-xs text-gray-400">{date}</span>}
-          {hit.authorName && <span className="text-xs text-gray-400">· {hit.authorName}</span>}
-        </div>
-        <h3 className="text-sm font-semibold text-gray-900 group-hover:text-indigo-600 line-clamp-1 transition-colors">
-          <Highlight attribute="title" hit={hit as any} />
-        </h3>
-        {hit.body && (
-          <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-            <Highlight attribute="body" hit={hit as any} />
-          </p>
-        )}
-      </div>
-    </a>
+    <EditorialCard
+      href={`/news/${hit.slug}`}
+      title={<Highlight attribute="title" hit={hit as never} />}
+      excerpt={hit.body ? <Highlight attribute="body" hit={hit as never} /> : "Read the full article for the latest BSAVA news and insights."}
+      imageUrl={hit.coverImageUrl}
+      imageAlt={hit.title}
+      primaryMeta={hit.authorName || "BSAVA"}
+      secondaryMeta={formatShortDate(hit.publicationDate) ?? "Date TBC"}
+    />
   );
 }
 
 function AuthorCard({ hit }: { hit: AuthorHit }) {
-  const inner = (
-    <>
-      {hit.avatarUrl ? (
-        <img src={hit.avatarUrl} alt={hit.title} className="w-12 h-12 rounded-full object-cover flex-shrink-0 border-2 border-gray-100" loading="lazy" />
-      ) : (
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center flex-shrink-0 text-lg font-bold text-amber-700">
-          {hit.title.charAt(0).toUpperCase()}
-        </div>
-      )}
-      <div className="min-w-0 flex-1">
-        <h3 className="text-sm font-semibold text-gray-900 group-hover:text-amber-700 truncate transition-colors">
-          <Highlight attribute="title" hit={hit as any} />
-        </h3>
-        {hit.bio && (
-          <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-            <Highlight attribute="bio" hit={hit as any} />
-          </p>
+  const content = (
+    <SurfaceCard className="flex h-full w-full max-w-[300px] flex-col pb-[30px] transition-transform duration-200 group-hover:-translate-y-0.5">
+      <div className="flex h-[214px] items-center justify-center overflow-hidden bg-[#f4f4f4]">
+        {hit.avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={hit.avatarUrl}
+            alt={hit.title}
+            className="h-[108px] w-[108px] rounded-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex h-[108px] w-[108px] items-center justify-center rounded-full bg-[#1d1c1d]/8 font-bsava-display text-[42px] leading-none tracking-[-0.05em] text-[#1d1c1d]">
+            {hit.title.charAt(0).toUpperCase()}
+          </div>
         )}
-        {hit.slug && <span className="text-xs text-amber-600 mt-0.5 block group-hover:underline">View profile →</span>}
       </div>
-    </>
+
+      <div className="flex flex-1 flex-col gap-[13px] px-[20px] pt-[24px]">
+        <h3 className="min-h-[48px] line-clamp-2 font-inter text-[16px] font-extrabold leading-[1.5] text-[#1d1c1d] [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit">
+          <Highlight attribute="title" hit={hit as never} />
+        </h3>
+
+        <p className="min-h-[84px] line-clamp-4 font-inter text-[14px] leading-[1.5] text-[#1d1c1d]/85 [&_mark]:bg-[#f6eb72] [&_mark]:px-[1px] [&_mark]:text-inherit">
+          {hit.bio ? <Highlight attribute="bio" hit={hit as never} /> : "Explore this author's profile and latest BSAVA content."}
+        </p>
+
+        <span className="mt-auto inline-flex items-center gap-[6px] font-inter text-[12px] font-semibold uppercase tracking-[0.14em] text-[#1d1c1d]">
+          View profile
+          <span aria-hidden="true">→</span>
+        </span>
+      </div>
+    </SurfaceCard>
   );
 
-  const baseClass = "group flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-amber-200 hover:shadow-md transition-all duration-200";
-
-  return hit.slug
-    ? <a href={`/authors/${hit.slug}`} className={baseClass}>{inner}</a>
-    : <div className={baseClass}>{inner}</div>;
+  return hit.slug ? (
+    <Link href={`/authors/${hit.slug}`} className="group block w-full max-w-[300px] justify-self-center">
+      {content}
+    </Link>
+  ) : (
+    <div className="group block w-full max-w-[300px] justify-self-center">{content}</div>
+  );
 }
 
 function ProductCard({ hit }: { hit: ProductHit }) {
   const imageUrl = getPimcoreImageUrl(hit.mainImage?.fullpath);
+
   return (
-    <div className="group flex flex-col bg-white rounded-xl border border-gray-100 overflow-hidden hover:border-emerald-200 hover:shadow-md transition-all duration-200">
-      <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center p-3">
-        {imageUrl ? (
-          <img src={imageUrl} alt={hit.title} className="w-full h-full object-contain mix-blend-multiply" loading="lazy" />
-        ) : (
-          <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-        )}
-      </div>
-      <div className="p-3 flex flex-col flex-grow">
-        <span className="inline-block self-start px-2 py-0.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full mb-2">
-          {hit.productType}
-        </span>
-        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 flex-grow group-hover:text-emerald-700 transition-colors">
-          <Highlight attribute="title" hit={hit as any} />
-        </h3>
-        <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
-          <span className="text-sm font-bold text-gray-900">{hit.basePrice ? `£${hit.basePrice}` : '—'}</span>
-          <span className="text-xs text-gray-400">{hit.sku}</span>
+    <div className="group block w-full max-w-[300px] justify-self-center">
+      <SurfaceCard className="flex h-full w-full flex-col overflow-hidden pb-[24px] transition-transform duration-200 group-hover:-translate-y-0.5">
+        <div className="relative h-[180px] overflow-hidden bg-[#eeeeee]">
+          <span className="absolute bottom-0 left-0 rounded-tr-[4px] bg-white px-[10px] py-[5px] font-inter text-[12px] font-semibold uppercase leading-[1.5] text-[#1d1c1d]">
+            {hit.productType}
+          </span>
+          {imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={imageUrl} alt={hit.title} className="h-full w-full object-contain p-5" loading="lazy" />
+          ) : (
+            <div className="flex h-full items-center justify-center text-[18px] font-black uppercase tracking-[0.14em] text-black/20">
+              BSAVA
+            </div>
+          )}
         </div>
-      </div>
+
+        <div className="flex flex-1 flex-col gap-3 px-4 pt-4">
+          <h3 className="line-clamp-2 min-h-[48px] font-inter text-[16px] font-extrabold leading-[1.45] text-[#1d1c1d]">
+            <Highlight attribute="title" hit={hit as never} />
+          </h3>
+          <div className="mt-auto flex items-end justify-between gap-4 border-t border-[#e5e5e5] pt-3">
+            <span className="font-inter text-[14px] font-semibold leading-[1.5] text-[#1d1c1d]">
+              {hit.basePrice ? `£${hit.basePrice}` : "£TBC"}
+            </span>
+            <span className="font-inter text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6d6d6d]">
+              {hit.sku}
+            </span>
+          </div>
+        </div>
+      </SurfaceCard>
     </div>
   );
 }
 
-// ── Section wrapper — only renders if there are hits ──────────────────────────
-
-function Section({
+function ResultSection({
   title,
-  accentClass,
+  count,
   children,
 }: {
   title: string;
-  accentClass: string;
+  count: number;
   children: React.ReactNode;
 }) {
-  const { results } = useInstantSearch();
-  if (!results || results.nbHits === 0) return null;
+  if (!count) return null;
 
   return (
-    <section className="mb-10">
-      <div className="flex items-center gap-3 mb-4">
-        <span className={`w-1 h-5 rounded-full ${accentClass}`} />
-        <h2 className="text-base font-semibold text-gray-800">{title}</h2>
-        <span className="text-xs text-gray-400 font-normal">
-          {results.nbHits} result{results.nbHits !== 1 ? 's' : ''}
+    <section className="flex flex-col gap-6">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <SectionHeading title={title} />
+        <span className="font-inter text-[12px] font-semibold uppercase tracking-[0.16em] text-[#6d6d6d]">
+          {count} result{count === 1 ? "" : "s"}
         </span>
       </div>
       {children}
@@ -177,172 +180,174 @@ function Section({
   );
 }
 
-// ── Product section (includes inline productType filter) ──────────────────────
-
 const refinementPillStyles = [
-  '[&_.ais-RefinementList-list]:flex',
-  '[&_.ais-RefinementList-list]:flex-wrap',
-  '[&_.ais-RefinementList-list]:gap-2',
-  '[&_.ais-RefinementList-list]:mb-4',
-  '[&_.ais-RefinementList-item]:inline-flex',
-  '[&_.ais-RefinementList-label]:inline-flex',
-  '[&_.ais-RefinementList-label]:items-center',
-  '[&_.ais-RefinementList-label]:gap-1.5',
-  '[&_.ais-RefinementList-label]:px-3',
-  '[&_.ais-RefinementList-label]:py-1',
-  '[&_.ais-RefinementList-label]:rounded-full',
-  '[&_.ais-RefinementList-label]:border',
-  '[&_.ais-RefinementList-label]:border-gray-200',
-  '[&_.ais-RefinementList-label]:bg-white',
-  '[&_.ais-RefinementList-label]:text-xs',
-  '[&_.ais-RefinementList-label]:font-medium',
-  '[&_.ais-RefinementList-label]:text-gray-600',
-  '[&_.ais-RefinementList-label]:cursor-pointer',
-  '[&_.ais-RefinementList-label]:hover:border-emerald-400',
-  '[&_.ais-RefinementList-label]:hover:text-emerald-700',
-  '[&_.ais-RefinementList-label]:transition-colors',
-  '[&_.ais-RefinementList-checkbox]:hidden',
-  '[&_.ais-RefinementList-item--selected_.ais-RefinementList-label]:bg-emerald-50',
-  '[&_.ais-RefinementList-item--selected_.ais-RefinementList-label]:border-emerald-400',
-  '[&_.ais-RefinementList-item--selected_.ais-RefinementList-label]:text-emerald-800',
-  '[&_.ais-RefinementList-count]:text-gray-400',
-].join(' ');
+  "[&_.ais-RefinementList-list]:flex",
+  "[&_.ais-RefinementList-list]:flex-wrap",
+  "[&_.ais-RefinementList-list]:gap-2",
+  "[&_.ais-RefinementList-item]:inline-flex",
+  "[&_.ais-RefinementList-label]:inline-flex",
+  "[&_.ais-RefinementList-label]:items-center",
+  "[&_.ais-RefinementList-label]:gap-1.5",
+  "[&_.ais-RefinementList-label]:rounded-[2px]",
+  "[&_.ais-RefinementList-label]:border",
+  "[&_.ais-RefinementList-label]:border-[#d9d9d9]",
+  "[&_.ais-RefinementList-label]:bg-white",
+  "[&_.ais-RefinementList-label]:px-3",
+  "[&_.ais-RefinementList-label]:py-2",
+  "[&_.ais-RefinementList-label]:font-inter",
+  "[&_.ais-RefinementList-label]:text-[12px]",
+  "[&_.ais-RefinementList-label]:font-semibold",
+  "[&_.ais-RefinementList-label]:uppercase",
+  "[&_.ais-RefinementList-label]:tracking-[0.14em]",
+  "[&_.ais-RefinementList-label]:text-[#1d1c1d]",
+  "[&_.ais-RefinementList-label]:transition-colors",
+  "[&_.ais-RefinementList-label]:hover:border-[#1d1c1d]",
+  "[&_.ais-RefinementList-checkbox]:hidden",
+  "[&_.ais-RefinementList-item--selected_.ais-RefinementList-label]:border-[#1d1c1d]",
+  "[&_.ais-RefinementList-item--selected_.ais-RefinementList-label]:bg-[#1d1c1d]",
+  "[&_.ais-RefinementList-item--selected_.ais-RefinementList-label]:text-white",
+  "[&_.ais-RefinementList-count]:text-current/60",
+].join(" ");
 
-function ProductSection() {
+function SearchContent() {
+  const { query } = useSearchBox();
   const { results } = useInstantSearch();
-  if (!results || results.nbHits === 0) return null;
-
-  return (
-    <section className="mb-10">
-      <div className="flex items-center gap-3 mb-3">
-        <span className="w-1 h-5 rounded-full bg-emerald-400" />
-        <h2 className="text-base font-semibold text-gray-800">Products</h2>
-        <span className="text-xs text-gray-400 font-normal">
-          {results.nbHits} result{results.nbHits !== 1 ? 's' : ''}
-        </span>
-      </div>
-
-      {/* Pill-style productType filter */}
-      <div className={refinementPillStyles}>
-        <RefinementList attribute="productType" />
-      </div>
-
-      {/* Product grid */}
-      <div className="[&_.ais-Hits-list]:grid [&_.ais-Hits-list]:grid-cols-2 [&_.ais-Hits-list]:sm:grid-cols-3 [&_.ais-Hits-list]:lg:grid-cols-4 [&_.ais-Hits-list]:gap-4 [&_.ais-Hits-item]:h-full">
-        <Hits hitComponent={ProductCard as any} />
-      </div>
-    </section>
-  );
-}
-
-// ── Page ──────────────────────────────────────────────────────────────────────
-
-export default function SearchPage() {
-  if (!indexName) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-8 bg-gray-50">
-        <div className="max-w-md w-full bg-red-50 p-6 rounded-lg text-red-800 border-l-4 border-red-500">
-          <h2 className="text-lg font-bold mb-2">Configuration Error</h2>
-          <p>The Algolia index name is not configured. Check your <code>.env.local</code>.</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* ── Hero search bar ── */}
-      <div className="bg-white border-b border-gray-200 py-10 px-4">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl font-extrabold text-gray-900 mb-1 text-center">Search BSAVA</h1>
-          <p className="text-sm text-gray-500 text-center mb-6">Products, articles &amp; authors — all in one place.</p>
-          <InstantSearch searchClient={searchClient} indexName={indexName}>
-            {/* We use an outer InstantSearch just to drive the SearchBox query — the inner Indexes share this state */}
-            <InnerSearchPage />
-          </InstantSearch>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Inner component so useInstantSearch is within InstantSearch context
-function InnerSearchPage() {
-  const { indexUiState } = useInstantSearch();
-  const hasQuery = !!indexUiState.query;
+  const hasQuery = query.trim().length > 0 || !!results?.query?.trim();
+  const hasResults = !!results && results.nbHits > 0;
 
   return (
     <>
-      {/* Search Box */}
-      <div className="[&_.ais-SearchBox-form]:relative
-                      [&_.ais-SearchBox-input]:block
-                      [&_.ais-SearchBox-input]:w-full
-                      [&_.ais-SearchBox-input]:pl-11
-                      [&_.ais-SearchBox-input]:pr-4
-                      [&_.ais-SearchBox-input]:py-3.5
-                      [&_.ais-SearchBox-input]:rounded-xl
-                      [&_.ais-SearchBox-input]:border
-                      [&_.ais-SearchBox-input]:border-gray-300
-                      [&_.ais-SearchBox-input]:bg-white
-                      [&_.ais-SearchBox-input]:text-gray-900
-                      [&_.ais-SearchBox-input]:shadow-sm
-                      [&_.ais-SearchBox-input]:placeholder-gray-400
-                      [&_.ais-SearchBox-input]:focus:outline-none
-                      [&_.ais-SearchBox-input]:focus:ring-2
-                      [&_.ais-SearchBox-input]:focus:ring-indigo-500
-                      [&_.ais-SearchBox-input]:focus:border-transparent
-                      [&_.ais-SearchBox-submit]:absolute
-                      [&_.ais-SearchBox-submit]:left-3.5
-                      [&_.ais-SearchBox-submit]:top-1/2
-                      [&_.ais-SearchBox-submit]:-translate-y-1/2
-                      [&_.ais-SearchBox-submit]:text-gray-400
-                      [&_.ais-SearchBox-reset]:absolute
-                      [&_.ais-SearchBox-reset]:right-3.5
-                      [&_.ais-SearchBox-reset]:top-1/2
-                      [&_.ais-SearchBox-reset]:-translate-y-1/2
-                      [&_.ais-SearchBox-reset]:text-gray-400">
-        <SearchBox placeholder="Search products, articles, authors…" autoFocus />
-      </div>
+      <PageHero
+        title="Search"
+        description="Search products, articles, and authors across the BSAVA experience."
+        centered
+      >
+        <div
+          className="[&_.ais-SearchBox-form]:relative
+                     [&_.ais-SearchBox-input]:block
+                     [&_.ais-SearchBox-input]:w-full
+                     [&_.ais-SearchBox-input]:rounded-[2px]
+                     [&_.ais-SearchBox-input]:border
+                     [&_.ais-SearchBox-input]:border-[#d9d9d9]
+                     [&_.ais-SearchBox-input]:bg-white
+                     [&_.ais-SearchBox-input]:px-4
+                     [&_.ais-SearchBox-input]:py-[18px]
+                     [&_.ais-SearchBox-input]:pl-12
+                     [&_.ais-SearchBox-input]:font-inter
+                     [&_.ais-SearchBox-input]:text-[16px]
+                     [&_.ais-SearchBox-input]:leading-[1.5]
+                     [&_.ais-SearchBox-input]:text-[#1d1c1d]
+                     [&_.ais-SearchBox-input]:placeholder-[#8a8a8a]
+                     [&_.ais-SearchBox-input]:outline-none
+                     [&_.ais-SearchBox-input]:focus:border-[#1d1c1d]
+                     [&_.ais-SearchBox-submit]:absolute
+                     [&_.ais-SearchBox-submit]:left-4
+                     [&_.ais-SearchBox-submit]:top-1/2
+                     [&_.ais-SearchBox-submit]:-translate-y-1/2
+                     [&_.ais-SearchBox-submit]:text-[#8a8a8a]
+                     [&_.ais-SearchBox-reset]:absolute
+                     [&_.ais-SearchBox-reset]:right-4
+                     [&_.ais-SearchBox-reset]:top-1/2
+                     [&_.ais-SearchBox-reset]:-translate-y-1/2
+                     [&_.ais-SearchBox-reset]:text-[#8a8a8a]"
+        >
+          <div className="w-full max-w-[840px]">
+            <SearchBox placeholder="Search products, articles, authors..." autoFocus />
+          </div>
+        </div>
+      </PageHero>
 
-      {/* ── Federated results ── */}
-      <div className="max-w-5xl mx-auto px-4 py-10">
-
-        {/* Articles */}
+      <PageContainer className="flex flex-col gap-12 pb-16 md:pb-20">
         <Index indexId="articles-section" indexName={indexName}>
           <Configure filters="type:article" hitsPerPage={4} />
-          <Section title="Articles" accentClass="bg-indigo-400">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 [&_.ais-Hits-list]:contents [&_.ais-Hits-item]:contents">
-              <Hits hitComponent={ArticleCard as any} />
+          <SectionWithHits title="Articles">
+            <div className={archiveSearchGridClasses}>
+              <Hits hitComponent={ArticleCard as never} />
             </div>
-          </Section>
+          </SectionWithHits>
         </Index>
 
-        {/* Authors */}
         <Index indexId="authors-section" indexName={indexName}>
           <Configure filters="type:author" hitsPerPage={4} />
-          <Section title="Authors" accentClass="bg-amber-400">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 [&_.ais-Hits-list]:contents [&_.ais-Hits-item]:contents">
-              <Hits hitComponent={AuthorCard as any} />
+          <SectionWithHits title="Authors">
+            <div className={archiveSearchGridClasses}>
+              <Hits hitComponent={AuthorCard as never} />
             </div>
-          </Section>
+          </SectionWithHits>
         </Index>
 
-        {/* Products with inline productType facet */}
         <Index indexId="products-section" indexName={indexName}>
           <Configure filters="type:product" hitsPerPage={8} />
           <ProductSection />
         </Index>
 
-        {/* Empty state when no query */}
-        {!hasQuery && (
-          <div className="text-center py-12 text-gray-400">
-            <svg className="mx-auto w-12 h-12 mb-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <p className="text-sm">Start typing to search across products, articles and authors.</p>
-          </div>
-        )}
-      </div>
+        {!hasQuery && !hasResults ? (
+          <SurfaceCard className="px-8 py-12 text-center">
+            <div className="mx-auto flex max-w-[520px] flex-col items-center gap-4">
+              <h2 className="font-bsava-display text-[28px] leading-[1.05] tracking-[-0.05em] text-[#1d1c1d]">
+                Start typing to search
+              </h2>
+              <p className="font-inter text-[16px] leading-[1.55] text-[#5d5d5d]">
+                Browse products, articles, and authors from one place using the search box above.
+              </p>
+            </div>
+          </SurfaceCard>
+        ) : null}
+      </PageContainer>
     </>
+  );
+}
+
+function SectionWithHits({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  const { results } = useInstantSearch();
+
+  if (!results || results.nbHits === 0) return null;
+
+  return (
+    <ResultSection title={title} count={results.nbHits}>
+      {children}
+    </ResultSection>
+  );
+}
+
+function ProductSection() {
+  const { results } = useInstantSearch();
+
+  if (!results || results.nbHits === 0) return null;
+
+  return (
+    <ResultSection title="Products" count={results.nbHits}>
+      <div className={refinementPillStyles}>
+        <RefinementList attribute="productType" />
+      </div>
+
+      <div className={productSearchGridClasses}>
+        <Hits hitComponent={ProductCard as never} />
+      </div>
+    </ResultSection>
+  );
+}
+
+export default function SearchPage() {
+  if (!indexName) {
+    return (
+      <div className="min-h-screen bg-white">
+        <PageHero title="Search" description="Search is currently unavailable because the Algolia index is not configured." />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white">
+      <InstantSearch searchClient={searchClient} indexName={indexName}>
+        <SearchContent />
+      </InstantSearch>
+    </div>
   );
 }

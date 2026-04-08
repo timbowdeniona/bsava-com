@@ -1,5 +1,7 @@
 import fs from 'fs';
 import path from 'path';
+
+import { PageContainer, PageHero, SectionHeading, SurfaceCard } from '@/components/page/PagePrimitives';
 import Mermaid from '../components/Mermaid';
 
 type ContentBlock = {
