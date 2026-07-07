@@ -78,11 +78,14 @@ flowchart TB
 
 ### Key Components:
 - **Presentation**: Decoupled React-based frontend hosted on Netlify.
-- **Identity & CRM**: **Okta** serves as the central CIAM platform, handling secure user authentication, session management, and issuing JWT tokens at the edge. **Salesforce** remains the core CRM and single source of truth for member records and master data, syncing status to the CIAM platform.
+- **Identity**: **Okta** serves as the central CIAM platform, handling secure user authentication, session management, and issuing JWT tokens at the edge. 
+- **CRM**: **Salesforce** remains the core CRM and single source of truth for member records and master data, syncing status to the CIAM platform.
 - **PIM & DAM**: **PIMcore** manages structured product data, including books, memberships, and digital assets.
 - **CMS**: **Contentful** manages marketing pages, news, and editorial content.
 - **Commerce & Transactions**: **Commerce Layer** handles the shopping cart, order management (OMS), and fulfilment logic. **Stripe** handles secure payments.
 - **Search**: **Algolia** provides sub-millisecond search across both content and products.
+- **Learning Management System**: **Brightspace** serves as the Learning Management System (LMS), delivering educational content and tracking user progress.
+- **Events Management**: **Swoogo** serves as the Events Management system, handling event registration and attendee management.
 
 ---
 
