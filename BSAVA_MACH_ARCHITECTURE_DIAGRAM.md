@@ -5,7 +5,7 @@ This document provides a comprehensive overview of the headless, composable arch
 ---
 
 ## 1. Abstract Target Architecture
-This diagram outlines the complete ecosystem of headless services that form the BSAVA MACH platform. It highlights the decoupled nature of the services and the central role of **SSO** and **CRM** in managing user identities and entitlements.
+This diagram outlines the complete ecosystem of headless services that form the BSAVA MACH platform. It highlights the decoupled nature of the services and the central role of **CIAM** and **CRM** in managing user identities and entitlements.
 
 ```mermaid
 flowchart TB
@@ -22,8 +22,8 @@ flowchart TB
     subgraph Identity ["Identity & CRM (The Core)"]
         direction TB
         Salesforce["Salesforce"]
-        SSO["SSO (SAML / OAuth 2.0)"]
-        Salesforce --- SSO
+        CIAM["Okta (CIAM)"]
+        Salesforce -->|Syncs Member Data| CIAM
     end
 
     subgraph Content ["Content & Asset Management"]
@@ -44,13 +44,12 @@ flowchart TB
 
     %% Interactions
     User -- "Browses / Searches" --> NextJS
-    User -- "Single Sign-On" --> SSO
+    User -- "Authenticates" --> CIAM
     
     NextJS -- "Cart & Order API" --> CommerceLayer
     NextJS -- "GraphQL / REST" --> Contentful
     NextJS -- "GraphQL / REST" --> PIMcore
-    NextJS -- "Verified Session" --> SSO
-    NextJS -- "Check Entitlements" --> Salesforce
+    NextJS -- "Validates JWT Token" --> CIAM
     NextJS -- "Instant Search" --> Algolia
     NextJS -- "Registration API" --> Swoogo
     CommerceLayer -- "Triggers Payment" --> Stripe
@@ -71,7 +70,7 @@ flowchart TB
     classDef search fill:#5468FF,stroke:#333,stroke-width:2px,color:#fff
     
     class NextJS,Edge presentation
-    class Salesforce,SSO identity
+    class Salesforce,CIAM identity
     class Contentful,PIMcore content
     class CommerceLayer,Stripe,Swoogo,Brightspace commerce
     class Algolia search
@@ -79,7 +78,7 @@ flowchart TB
 
 ### Key Components:
 - **Presentation**: Decoupled React-based frontend hosted on Netlify.
-- **Identity & CRM**: **Salesforce** acts as the single source of truth for members. **SSO** provides a seamless login experience across the ecosystem.
+- **Identity & CRM**: **Okta** serves as the central CIAM platform, handling secure user authentication, session management, and issuing JWT tokens at the edge. **Salesforce** remains the core CRM and single source of truth for member records and master data, syncing status to the CIAM platform.
 - **PIM & DAM**: **PIMcore** manages structured product data, including books, memberships, and digital assets.
 - **CMS**: **Contentful** manages marketing pages, news, and editorial content.
 - **Commerce & Transactions**: **Commerce Layer** handles the shopping cart, order management (OMS), and fulfilment logic. **Stripe** handles secure payments.
@@ -113,7 +112,7 @@ flowchart TB
         direction TB
         CommerceLayer["Commerce Layer (OMS)"]
         Salesforce["CRM (Salesforce)"]
-        SSO["SSO Implementation"]
+        CIAM["CIAM (Okta)"]
         Swoogo["Swoogo (Events API)"]
         Brightspace["Brightspace (LMS API)"]
     end
@@ -128,7 +127,7 @@ flowchart TB
     %% Future Links
     NextJS -.-> CommerceLayer
     NextJS -.-> Salesforce
-    NextJS -.-> SSO
+    NextJS -.-> CIAM
     NextJS -.-> Swoogo
     NextJS -.-> Brightspace
 
@@ -139,7 +138,7 @@ flowchart TB
     
     class NextJS,Netlify active
     class Contentful,PIMcore,Algolia,Stripe core
-    class CommerceLayer,Salesforce,SSO,Swoogo,Brightspace future
+    class CommerceLayer,Salesforce,CIAM,Swoogo,Brightspace future
 ```
 
 ### Summary of Implementation:
@@ -201,13 +200,13 @@ An authenticated member purchases a physical publication using member pricing.
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant SSO as Auth (SSO)
+    participant CIAM as CIAM (Okta)
     participant N as Next.js
     participant P as PIMcore (PIM)
     participant CL as Commerce Layer (OMS)
 
-    U->>SSO: Authenticates
-    SSO-->>N: Returns Session + MemberID
+    U->>CIAM: Authenticates
+    CIAM-->>N: Returns Session + JWT (with Member Claims)
     U->>N: Navigates to Book Catalog
     N->>P: Fetches Book Detail + Member Price
     N-->>U: Shows Discounted Price
@@ -246,12 +245,10 @@ A member accesses their learning dashboard to continue an online course.
 sequenceDiagram
     participant U as User
     participant N as Next.js
-    participant SF as Salesforce (Entitlements)
     participant BS as Brightspace (LMS)
 
     U->>N: Opens "My Learning" Portal
-    N->>SF: Verifies Membership Status & Course Access
-    SF-->>N: Access Granted
+    N->>N: Reads membership entitlements from verified CIAM JWT Token Claims
     N->>BS: Fetches Enrolled Courses & Progress
     BS-->>N: Returns Course List + Progress %
     U->>N: Clicks "Resume Course"
