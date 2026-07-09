@@ -42,6 +42,10 @@ flowchart TB
         Algolia["Algolia (Search)"]
     end
 
+    subgraph Integration ["Integration & Orchestration"]
+        Workato["Workato (Orchestration Hub)"]
+    end
+
     %% Interactions
     User -- "Browses / Searches" --> NextJS
     User -- "Authenticates" --> CIAM
@@ -55,12 +59,19 @@ flowchart TB
     CommerceLayer -- "Triggers Payment" --> Stripe
     NextJS -- "Learn / Progress" --> Brightspace
 
-    %% Sync Flows
-    Contentful -- "Webhooks" --> Algolia
-    PIMcore -- "Webhooks" --> Algolia
-    PIMcore -- "Price/Stock Sync" --> CommerceLayer
-    Swoogo -- "Sync Events" --> PIMcore
-    Brightspace -- "Sync Courses" --> PIMcore
+    %% Sync Flows (via Workato)
+    Contentful -- "Webhooks" --> Workato
+    PIMcore -- "Webhooks" --> Workato
+    Swoogo -- "Webhooks" --> Workato
+    CommerceLayer -- "Webhooks" --> Workato
+    Brightspace -- "Events/Webhooks" --> Workato
+
+    Workato -- "Sync Content/Products/Courses" --> Algolia
+    Workato -- "Sync Events/Courses" --> PIMcore
+    Workato -- "Provision Orders/CPD" --> Salesforce
+    Workato -- "Confirm Registration" --> Swoogo
+    Workato -- "Enrol Members" --> Brightspace
+    Workato -- "Price/Stock Sync" --> CommerceLayer
 
     %% Styling
     classDef presentation fill:#000,stroke:#333,stroke-width:2px,color:#fff
@@ -68,18 +79,20 @@ flowchart TB
     classDef content fill:#1798c1,stroke:#333,stroke-width:2px,color:#fff
     classDef commerce fill:#635BFF,stroke:#333,stroke-width:2px,color:#fff
     classDef search fill:#5468FF,stroke:#333,stroke-width:2px,color:#fff
+    classDef integration fill:#F58220,stroke:#333,stroke-width:2px,color:#fff
     
     class NextJS,Edge presentation
     class Salesforce,CIAM identity
     class Contentful,PIMcore content
     class CommerceLayer,Stripe,Swoogo,Brightspace commerce
     class Algolia search
+    class Workato integration
 ```
 
 ### Key Components:
 - **Presentation**: Decoupled React-based frontend hosted on Netlify.
-- **Identity**: **Okta** serves as the central CIAM platform, handling secure user authentication, session management, and issuing JWT tokens at the edge. 
-- **CRM**: **Salesforce** remains the core CRM and single source of truth for member records and master data, syncing status to the CIAM platform.
+- **Identity & CRM**: **Okta** serves as the central CIAM platform, handling secure user authentication, session management, and issuing JWT tokens at the edge. **Salesforce** remains the core CRM and single source of truth for member records and master data, syncing status to the CIAM platform.
+- **Integration**: **Workato** acts as the central integration hub, managing all backend synchronization, event indexing, and back-office automated workflows.
 - **PIM & DAM**: **PIMcore** manages structured product data, including books, memberships, and digital assets.
 - **CMS**: **Contentful** manages marketing pages, news, and editorial content.
 - **Commerce & Transactions**: **Commerce Layer** handles the shopping cart, order management (OMS), and fulfilment logic. **Stripe** handles secure payments.
@@ -118,6 +131,7 @@ flowchart TB
         CIAM["CIAM (Okta)"]
         Swoogo["Swoogo (Events API)"]
         Brightspace["Brightspace (LMS API)"]
+        Workato["Workato (Orchestration)"]
     end
 
     %% Interactions
@@ -129,10 +143,13 @@ flowchart TB
 
     %% Future Links
     NextJS -.-> CommerceLayer
-    NextJS -.-> Salesforce
     NextJS -.-> CIAM
     NextJS -.-> Swoogo
     NextJS -.-> Brightspace
+    Workato -.-> Salesforce
+    Workato -.-> Swoogo
+    Workato -.-> Brightspace
+    Workato -.-> CommerceLayer
 
     %% Styling
     classDef active fill:#00A859,stroke:#333,stroke-width:2px,color:#fff
@@ -141,7 +158,7 @@ flowchart TB
     
     class NextJS,Netlify active
     class Contentful,PIMcore,Algolia,Stripe core
-    class CommerceLayer,Salesforce,CIAM,Swoogo,Brightspace future
+    class CommerceLayer,Salesforce,CIAM,Swoogo,Brightspace,Workato future
 ```
 
 ### Summary of Implementation:
@@ -150,6 +167,7 @@ flowchart TB
 3.  **PIMcore**: Successfully connected via GraphQL/REST ([pimcore.ts](file:///home/timbowden/dev/bsava-com/src/lib/pimcore.ts)) to serve the product catalogue.
 4.  **Algolia**: Search UI and client-side indexing hooks are in place.
 5.  **Stripe**: Checkout session creation and basic bundling logic are implemented in the API routes.
+6.  **Workato**: Selected as the central integration engine; recipes are designed and prioritized (Swoogo, Salesforce, Brightspace integrations) to avoid custom integrations in Next.js.
 
 ---
 
@@ -184,6 +202,7 @@ sequenceDiagram
     participant N as Next.js
     participant CL as Commerce Layer (OMS)
     participant S as Stripe (Payments)
+    participant W as Workato (Orchestrator)
     participant SF as Salesforce (CRM)
 
     U->>N: Selects Membership Level
@@ -194,7 +213,9 @@ sequenceDiagram
     U->>S: Provides Payment Details (Stripe Elements)
     S-->>CL: Payment Success Webhook
     CL-->>N: Order Confirmed
-    CL->>SF: Trigger Provisioning (Create Member Record)
+    CL-->>W: order.placed Webhook
+    W->>SF: Lookup / Create Contact & Order
+    W->>SF: Provision Entitlements
     N-->>U: Show Success & Welcome Message
 ```
 
@@ -228,6 +249,7 @@ sequenceDiagram
     participant N as Next.js
     participant A as Algolia
     participant SW as Swoogo (Events)
+    participant W as Workato (Orchestrator)
     participant SF as Salesforce
 
     U->>N: Filters Events
@@ -237,7 +259,9 @@ sequenceDiagram
     N->>SW: Sync Member Data & Open Registration API
     SW-->>N: Returns Registration Flow
     U->>SW: Completes Registration Logic
-    SW->>SF: Updates Contact History
+    SW-->>W: registration.completed Webhook
+    W->>SF: Find/Create Contact & Log Attendance
+    W->>SF: Assign Entitlements
     SW-->>N: Event Registration Success
     N-->>U: Show "My Events" Update
 ```
