@@ -6,20 +6,15 @@ Workato acts as the **central orchestration hub** for all back-office, system-to
 
 ## Architecture Role
 
-```
-Swoogo ──→ [ Workato ] ──→ PIMcore
-                │
-                ├──→ Salesforce
-                ├──→ Commerce Layer
-                ├──→ Brightspace
-                └──→ Algolia
-```
+![Workato: Central Orchestration Hub](./images/17-workato-architecture-role.jpg)
 
 Workato is the **only component** responsible for cross-system data movement. The Next.js frontend never acts as an integration intermediary.
 
 ---
 
 ## Recipes
+
+![10 Integration Recipes at a Glance](./images/18-workato-recipe-overview.jpg)
 
 ### 1. Swoogo → PIMcore: Event Sync
 
@@ -54,6 +49,8 @@ Workato is the **only component** responsible for cross-system data movement. Th
 | Condition | Order status = `placed` and payment = `paid` |
 | Action | Lookup Salesforce Contact by email → create if not found → create `Order` record → assign membership/entitlement |
 | Error Handling | Dead-letter queue for failed upserts; manual review dashboard |
+
+![Recipe 2: Order Provisioning Flow](./images/19-workato-order-provisioning-flow.jpg)
 
 ---
 
@@ -166,9 +163,13 @@ Workato is the **only component** responsible for cross-system data movement. Th
 | 🟢 P4 | Brightspace → Algolia | Course discoverability in search |
 | 🟢 P4 | Brightspace → Salesforce | CPD record keeping and renewals |
 
+![Implementation Priority — Recipe Map](./images/14-api-workato-recipe-map.jpg)
+
 ---
 
 ## Why Workato Over Custom Code
+
+![Why Workato Over Custom Code](./images/20-workato-vs-custom-code.jpg)
 
 | Concern | Custom Code | Workato |
 |---|---|---|

@@ -7,6 +7,8 @@ This document provides a comprehensive overview of the headless, composable arch
 ## 1. Abstract Target Architecture
 This diagram outlines the complete ecosystem of headless services that form the BSAVA MACH platform. It highlights the decoupled nature of the services and the central role of **CIAM** and **CRM** in managing user identities and entitlements.
 
+![Executive Architecture Overview](./documents/architecture/images/02-sor-executive-architecture.png)
+
 ```mermaid
 flowchart TB
     %% Nodes
@@ -106,6 +108,8 @@ flowchart TB
 ## 2. Current Implementation Status
 This diagram highlights what has been implemented and connected in the current codebase. Active integrations are highlighted in color, while future/planned integrations are shown in grayscale.
 
+![API High-Level System Topology](./documents/architecture/images/01-api-high-level-system-topology.png)
+
 ```mermaid
 flowchart TB
     %% Nodes
@@ -178,6 +182,9 @@ These diagrams show how the various components of the MACH architecture interact
 
 ### A. Non-Member Searches for Information
 A visitor searches the site for clinical resources or news.
+
+![Journey A: Non-Member Searches for Information](./documents/architecture/images/21-journey-a-search-information.jpg)
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -197,6 +204,9 @@ sequenceDiagram
 
 ### B. Non-Member Purchases Membership
 A visitor signs up for a BSAVA membership to access gated benefits.
+
+![Journey B: Non-Member Purchases Membership](./documents/architecture/images/22-journey-b-membership-purchase.jpg)
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -222,6 +232,9 @@ sequenceDiagram
 
 ### C. Member Buys a Book
 An authenticated member purchases a physical publication using member pricing.
+
+![Journey C: Member Buys a Book](./documents/architecture/images/23-journey-c-member-buys-book.jpg)
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -244,6 +257,9 @@ sequenceDiagram
 
 ### D. Member Books an Event
 An existing member registers for a CPD event or conference.
+
+![Journey D: Member Books an Event](./documents/architecture/images/24-journey-d-member-books-event.jpg)
+
 ```mermaid
 sequenceDiagram
     participant U as User
@@ -269,6 +285,9 @@ sequenceDiagram
 
 ### E. Member Studies a Course
 A member accesses their learning dashboard to continue an online course.
+
+![Journey E: Member Studies a Course](./documents/architecture/images/25-journey-e-member-studies-course.jpg)
+
 ```mermaid
 sequenceDiagram
     participant U as User
